@@ -6,7 +6,7 @@ authors = ["Charlie <charlie@vegaprotocol.io>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.11"
+python = "^3.9,<3.12"
 black = "^24.4.0"
 grpcio = "^1.62.1"
 grpcio-tools = "^1.62.1"
