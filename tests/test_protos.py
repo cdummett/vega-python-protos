@@ -1,4 +1,4 @@
-import vega_python_protos.protos as protos
+import vega_python_protos as protos
 
 
 def test_data_node_attributes():

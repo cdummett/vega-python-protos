@@ -120,6 +120,7 @@ class BusEventType(int, metaclass=_enum_type_wrapper.EnumTypeWrapper):
     BUS_EVENT_TYPE_PARTY_PROFILE_UPDATED: _ClassVar[BusEventType]
     BUS_EVENT_TYPE_TEAMS_STATS_UPDATED: _ClassVar[BusEventType]
     BUS_EVENT_TYPE_TIME_WEIGHTED_NOTIONAL_POSITION_UPDATED: _ClassVar[BusEventType]
+    BUS_EVENT_TYPE_CANCELLED_ORDERS: _ClassVar[BusEventType]
     BUS_EVENT_TYPE_MARKET: _ClassVar[BusEventType]
     BUS_EVENT_TYPE_TX_ERROR: _ClassVar[BusEventType]
 
@@ -216,6 +217,7 @@ BUS_EVENT_TYPE_PARTY_MARGIN_MODE_UPDATED: BusEventType
 BUS_EVENT_TYPE_PARTY_PROFILE_UPDATED: BusEventType
 BUS_EVENT_TYPE_TEAMS_STATS_UPDATED: BusEventType
 BUS_EVENT_TYPE_TIME_WEIGHTED_NOTIONAL_POSITION_UPDATED: BusEventType
+BUS_EVENT_TYPE_CANCELLED_ORDERS: BusEventType
 BUS_EVENT_TYPE_MARKET: BusEventType
 BUS_EVENT_TYPE_TX_ERROR: BusEventType
 
@@ -632,6 +634,7 @@ class ERC20MultiSigSignerAdded(_message.Message):
         "submitter",
         "nonce",
         "epoch_seq",
+        "chain_id",
     )
     SIGNATURE_ID_FIELD_NUMBER: _ClassVar[int]
     VALIDATOR_ID_FIELD_NUMBER: _ClassVar[int]
@@ -640,6 +643,7 @@ class ERC20MultiSigSignerAdded(_message.Message):
     SUBMITTER_FIELD_NUMBER: _ClassVar[int]
     NONCE_FIELD_NUMBER: _ClassVar[int]
     EPOCH_SEQ_FIELD_NUMBER: _ClassVar[int]
+    CHAIN_ID_FIELD_NUMBER: _ClassVar[int]
     signature_id: str
     validator_id: str
     timestamp: int
@@ -647,6 +651,7 @@ class ERC20MultiSigSignerAdded(_message.Message):
     submitter: str
     nonce: str
     epoch_seq: str
+    chain_id: str
     def __init__(
         self,
         signature_id: _Optional[str] = ...,
@@ -656,6 +661,7 @@ class ERC20MultiSigSignerAdded(_message.Message):
         submitter: _Optional[str] = ...,
         nonce: _Optional[str] = ...,
         epoch_seq: _Optional[str] = ...,
+        chain_id: _Optional[str] = ...,
     ) -> None: ...
 
 class ERC20MultiSigSignerRemovedSubmitter(_message.Message):
@@ -676,6 +682,7 @@ class ERC20MultiSigSignerRemoved(_message.Message):
         "old_signer",
         "nonce",
         "epoch_seq",
+        "chain_id",
     )
     SIGNATURE_SUBMITTERS_FIELD_NUMBER: _ClassVar[int]
     VALIDATOR_ID_FIELD_NUMBER: _ClassVar[int]
@@ -683,6 +690,7 @@ class ERC20MultiSigSignerRemoved(_message.Message):
     OLD_SIGNER_FIELD_NUMBER: _ClassVar[int]
     NONCE_FIELD_NUMBER: _ClassVar[int]
     EPOCH_SEQ_FIELD_NUMBER: _ClassVar[int]
+    CHAIN_ID_FIELD_NUMBER: _ClassVar[int]
     signature_submitters: _containers.RepeatedCompositeFieldContainer[
         ERC20MultiSigSignerRemovedSubmitter
     ]
@@ -691,6 +699,7 @@ class ERC20MultiSigSignerRemoved(_message.Message):
     old_signer: str
     nonce: str
     epoch_seq: str
+    chain_id: str
     def __init__(
         self,
         signature_submitters: _Optional[
@@ -701,6 +710,7 @@ class ERC20MultiSigSignerRemoved(_message.Message):
         old_signer: _Optional[str] = ...,
         nonce: _Optional[str] = ...,
         epoch_seq: _Optional[str] = ...,
+        chain_id: _Optional[str] = ...,
     ) -> None: ...
 
 class Transfer(_message.Message):
@@ -926,6 +936,7 @@ class ERC20MultiSigSignerEvent(_message.Message):
         "tx_hash",
         "log_index",
         "block_number",
+        "chain_id",
     )
 
     class Type(int, metaclass=_enum_type_wrapper.EnumTypeWrapper):
@@ -945,6 +956,7 @@ class ERC20MultiSigSignerEvent(_message.Message):
     TX_HASH_FIELD_NUMBER: _ClassVar[int]
     LOG_INDEX_FIELD_NUMBER: _ClassVar[int]
     BLOCK_NUMBER_FIELD_NUMBER: _ClassVar[int]
+    CHAIN_ID_FIELD_NUMBER: _ClassVar[int]
     id: str
     type: ERC20MultiSigSignerEvent.Type
     signer: str
@@ -953,6 +965,7 @@ class ERC20MultiSigSignerEvent(_message.Message):
     tx_hash: str
     log_index: int
     block_number: int
+    chain_id: str
     def __init__(
         self,
         id: _Optional[str] = ...,
@@ -963,6 +976,7 @@ class ERC20MultiSigSignerEvent(_message.Message):
         tx_hash: _Optional[str] = ...,
         log_index: _Optional[int] = ...,
         block_number: _Optional[int] = ...,
+        chain_id: _Optional[str] = ...,
     ) -> None: ...
 
 class ERC20MultiSigThresholdSetEvent(_message.Message):
@@ -974,6 +988,7 @@ class ERC20MultiSigThresholdSetEvent(_message.Message):
         "tx_hash",
         "log_index",
         "block_number",
+        "chain_id",
     )
     ID_FIELD_NUMBER: _ClassVar[int]
     NEW_THRESHOLD_FIELD_NUMBER: _ClassVar[int]
@@ -982,6 +997,7 @@ class ERC20MultiSigThresholdSetEvent(_message.Message):
     TX_HASH_FIELD_NUMBER: _ClassVar[int]
     LOG_INDEX_FIELD_NUMBER: _ClassVar[int]
     BLOCK_NUMBER_FIELD_NUMBER: _ClassVar[int]
+    CHAIN_ID_FIELD_NUMBER: _ClassVar[int]
     id: str
     new_threshold: int
     nonce: str
@@ -989,6 +1005,7 @@ class ERC20MultiSigThresholdSetEvent(_message.Message):
     tx_hash: str
     log_index: int
     block_number: int
+    chain_id: str
     def __init__(
         self,
         id: _Optional[str] = ...,
@@ -998,6 +1015,7 @@ class ERC20MultiSigThresholdSetEvent(_message.Message):
         tx_hash: _Optional[str] = ...,
         log_index: _Optional[int] = ...,
         block_number: _Optional[int] = ...,
+        chain_id: _Optional[str] = ...,
     ) -> None: ...
 
 class CheckpointEvent(_message.Message):
@@ -1196,8 +1214,8 @@ class TransactionResult(_message.Message):
         "batch_market_instructions",
         "key_rotate_submission",
         "ethereum_key_rotate_submission",
-        "stop_order_submission",
-        "stop_order_cancellation",
+        "stop_orders_submission",
+        "stop_orders_cancellation",
         "create_referral_set",
         "update_referral_set",
         "apply_referral_code",
@@ -1242,8 +1260,8 @@ class TransactionResult(_message.Message):
     BATCH_MARKET_INSTRUCTIONS_FIELD_NUMBER: _ClassVar[int]
     KEY_ROTATE_SUBMISSION_FIELD_NUMBER: _ClassVar[int]
     ETHEREUM_KEY_ROTATE_SUBMISSION_FIELD_NUMBER: _ClassVar[int]
-    STOP_ORDER_SUBMISSION_FIELD_NUMBER: _ClassVar[int]
-    STOP_ORDER_CANCELLATION_FIELD_NUMBER: _ClassVar[int]
+    STOP_ORDERS_SUBMISSION_FIELD_NUMBER: _ClassVar[int]
+    STOP_ORDERS_CANCELLATION_FIELD_NUMBER: _ClassVar[int]
     CREATE_REFERRAL_SET_FIELD_NUMBER: _ClassVar[int]
     UPDATE_REFERRAL_SET_FIELD_NUMBER: _ClassVar[int]
     APPLY_REFERRAL_CODE_FIELD_NUMBER: _ClassVar[int]
@@ -1276,8 +1294,8 @@ class TransactionResult(_message.Message):
     batch_market_instructions: _commands_pb2.BatchMarketInstructions
     key_rotate_submission: _validator_commands_pb2.KeyRotateSubmission
     ethereum_key_rotate_submission: _validator_commands_pb2.EthereumKeyRotateSubmission
-    stop_order_submission: _commands_pb2.StopOrdersSubmission
-    stop_order_cancellation: _commands_pb2.StopOrdersCancellation
+    stop_orders_submission: _commands_pb2.StopOrdersSubmission
+    stop_orders_cancellation: _commands_pb2.StopOrdersCancellation
     create_referral_set: _commands_pb2.CreateReferralSet
     update_referral_set: _commands_pb2.UpdateReferralSet
     apply_referral_code: _commands_pb2.ApplyReferralCode
@@ -1348,10 +1366,10 @@ class TransactionResult(_message.Message):
         ethereum_key_rotate_submission: _Optional[
             _Union[_validator_commands_pb2.EthereumKeyRotateSubmission, _Mapping]
         ] = ...,
-        stop_order_submission: _Optional[
+        stop_orders_submission: _Optional[
             _Union[_commands_pb2.StopOrdersSubmission, _Mapping]
         ] = ...,
-        stop_order_cancellation: _Optional[
+        stop_orders_cancellation: _Optional[
             _Union[_commands_pb2.StopOrdersCancellation, _Mapping]
         ] = ...,
         create_referral_set: _Optional[
@@ -1981,6 +1999,21 @@ class ExpiredOrders(_message.Message):
         order_ids: _Optional[_Iterable[str]] = ...,
     ) -> None: ...
 
+class CancelledOrders(_message.Message):
+    __slots__ = ("market_id", "party_id", "order_ids")
+    MARKET_ID_FIELD_NUMBER: _ClassVar[int]
+    PARTY_ID_FIELD_NUMBER: _ClassVar[int]
+    ORDER_IDS_FIELD_NUMBER: _ClassVar[int]
+    market_id: str
+    party_id: str
+    order_ids: _containers.RepeatedScalarFieldContainer[str]
+    def __init__(
+        self,
+        market_id: _Optional[str] = ...,
+        party_id: _Optional[str] = ...,
+        order_ids: _Optional[_Iterable[str]] = ...,
+    ) -> None: ...
+
 class TeamCreated(_message.Message):
     __slots__ = (
         "team_id",
@@ -2471,6 +2504,7 @@ class BusEvent(_message.Message):
         "party_profile_updated",
         "teams_stats_updated",
         "time_weighted_notional_position_updated",
+        "cancelled_orders",
         "market",
         "tx_err_event",
         "version",
@@ -2565,6 +2599,7 @@ class BusEvent(_message.Message):
     PARTY_PROFILE_UPDATED_FIELD_NUMBER: _ClassVar[int]
     TEAMS_STATS_UPDATED_FIELD_NUMBER: _ClassVar[int]
     TIME_WEIGHTED_NOTIONAL_POSITION_UPDATED_FIELD_NUMBER: _ClassVar[int]
+    CANCELLED_ORDERS_FIELD_NUMBER: _ClassVar[int]
     MARKET_FIELD_NUMBER: _ClassVar[int]
     TX_ERR_EVENT_FIELD_NUMBER: _ClassVar[int]
     VERSION_FIELD_NUMBER: _ClassVar[int]
@@ -2658,6 +2693,7 @@ class BusEvent(_message.Message):
     party_profile_updated: PartyProfileUpdated
     teams_stats_updated: TeamsStatsUpdated
     time_weighted_notional_position_updated: TimeWeightedNotionalPositionUpdated
+    cancelled_orders: CancelledOrders
     market: MarketEvent
     tx_err_event: TxErrorEvent
     version: int
@@ -2797,6 +2833,7 @@ class BusEvent(_message.Message):
         time_weighted_notional_position_updated: _Optional[
             _Union[TimeWeightedNotionalPositionUpdated, _Mapping]
         ] = ...,
+        cancelled_orders: _Optional[_Union[CancelledOrders, _Mapping]] = ...,
         market: _Optional[_Union[MarketEvent, _Mapping]] = ...,
         tx_err_event: _Optional[_Union[TxErrorEvent, _Mapping]] = ...,
         version: _Optional[int] = ...,

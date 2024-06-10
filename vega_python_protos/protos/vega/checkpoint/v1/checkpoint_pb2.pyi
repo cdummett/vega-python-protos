@@ -386,28 +386,32 @@ class Banking(_message.Message):
     __slots__ = (
         "transfers_at_time",
         "recurring_transfers",
-        "bridge_state",
+        "primary_bridge_state",
         "asset_actions",
-        "last_seen_eth_block",
+        "last_seen_primary_eth_block",
         "seen_refs",
         "governance_transfers_at_time",
         "recurring_governance_transfers",
+        "secondary_bridge_state",
+        "last_seen_secondary_eth_block",
     )
     TRANSFERS_AT_TIME_FIELD_NUMBER: _ClassVar[int]
     RECURRING_TRANSFERS_FIELD_NUMBER: _ClassVar[int]
-    BRIDGE_STATE_FIELD_NUMBER: _ClassVar[int]
+    PRIMARY_BRIDGE_STATE_FIELD_NUMBER: _ClassVar[int]
     ASSET_ACTIONS_FIELD_NUMBER: _ClassVar[int]
-    LAST_SEEN_ETH_BLOCK_FIELD_NUMBER: _ClassVar[int]
+    LAST_SEEN_PRIMARY_ETH_BLOCK_FIELD_NUMBER: _ClassVar[int]
     SEEN_REFS_FIELD_NUMBER: _ClassVar[int]
     GOVERNANCE_TRANSFERS_AT_TIME_FIELD_NUMBER: _ClassVar[int]
     RECURRING_GOVERNANCE_TRANSFERS_FIELD_NUMBER: _ClassVar[int]
+    SECONDARY_BRIDGE_STATE_FIELD_NUMBER: _ClassVar[int]
+    LAST_SEEN_SECONDARY_ETH_BLOCK_FIELD_NUMBER: _ClassVar[int]
     transfers_at_time: _containers.RepeatedCompositeFieldContainer[
         ScheduledTransferAtTime
     ]
     recurring_transfers: RecurringTransfers
-    bridge_state: BridgeState
+    primary_bridge_state: BridgeState
     asset_actions: _containers.RepeatedCompositeFieldContainer[AssetAction]
-    last_seen_eth_block: int
+    last_seen_primary_eth_block: int
     seen_refs: _containers.RepeatedScalarFieldContainer[str]
     governance_transfers_at_time: _containers.RepeatedCompositeFieldContainer[
         ScheduledGovernanceTransferAtTime
@@ -415,15 +419,17 @@ class Banking(_message.Message):
     recurring_governance_transfers: _containers.RepeatedCompositeFieldContainer[
         GovernanceTransfer
     ]
+    secondary_bridge_state: BridgeState
+    last_seen_secondary_eth_block: int
     def __init__(
         self,
         transfers_at_time: _Optional[
             _Iterable[_Union[ScheduledTransferAtTime, _Mapping]]
         ] = ...,
         recurring_transfers: _Optional[_Union[RecurringTransfers, _Mapping]] = ...,
-        bridge_state: _Optional[_Union[BridgeState, _Mapping]] = ...,
+        primary_bridge_state: _Optional[_Union[BridgeState, _Mapping]] = ...,
         asset_actions: _Optional[_Iterable[_Union[AssetAction, _Mapping]]] = ...,
-        last_seen_eth_block: _Optional[int] = ...,
+        last_seen_primary_eth_block: _Optional[int] = ...,
         seen_refs: _Optional[_Iterable[str]] = ...,
         governance_transfers_at_time: _Optional[
             _Iterable[_Union[ScheduledGovernanceTransferAtTime, _Mapping]]
@@ -431,21 +437,26 @@ class Banking(_message.Message):
         recurring_governance_transfers: _Optional[
             _Iterable[_Union[GovernanceTransfer, _Mapping]]
         ] = ...,
+        secondary_bridge_state: _Optional[_Union[BridgeState, _Mapping]] = ...,
+        last_seen_secondary_eth_block: _Optional[int] = ...,
     ) -> None: ...
 
 class BridgeState(_message.Message):
-    __slots__ = ("active", "block_height", "log_index")
+    __slots__ = ("active", "block_height", "log_index", "chain_id")
     ACTIVE_FIELD_NUMBER: _ClassVar[int]
     BLOCK_HEIGHT_FIELD_NUMBER: _ClassVar[int]
     LOG_INDEX_FIELD_NUMBER: _ClassVar[int]
+    CHAIN_ID_FIELD_NUMBER: _ClassVar[int]
     active: bool
     block_height: int
     log_index: int
+    chain_id: str
     def __init__(
         self,
         active: bool = ...,
         block_height: _Optional[int] = ...,
         log_index: _Optional[int] = ...,
+        chain_id: _Optional[str] = ...,
     ) -> None: ...
 
 class Validators(_message.Message):
@@ -552,10 +563,12 @@ class MarketTracker(_message.Message):
         "market_activity",
         "taker_notional_volume",
         "market_to_party_taker_notional_volume",
+        "epoch_taker_fees",
     )
     MARKET_ACTIVITY_FIELD_NUMBER: _ClassVar[int]
     TAKER_NOTIONAL_VOLUME_FIELD_NUMBER: _ClassVar[int]
     MARKET_TO_PARTY_TAKER_NOTIONAL_VOLUME_FIELD_NUMBER: _ClassVar[int]
+    EPOCH_TAKER_FEES_FIELD_NUMBER: _ClassVar[int]
     market_activity: _containers.RepeatedCompositeFieldContainer[MarketActivityTracker]
     taker_notional_volume: _containers.RepeatedCompositeFieldContainer[
         TakerNotionalVolume
@@ -563,6 +576,7 @@ class MarketTracker(_message.Message):
     market_to_party_taker_notional_volume: _containers.RepeatedCompositeFieldContainer[
         MarketToPartyTakerNotionalVolume
     ]
+    epoch_taker_fees: _containers.RepeatedCompositeFieldContainer[EpochPartyTakerFees]
     def __init__(
         self,
         market_activity: _Optional[
@@ -573,6 +587,9 @@ class MarketTracker(_message.Message):
         ] = ...,
         market_to_party_taker_notional_volume: _Optional[
             _Iterable[_Union[MarketToPartyTakerNotionalVolume, _Mapping]]
+        ] = ...,
+        epoch_taker_fees: _Optional[
+            _Iterable[_Union[EpochPartyTakerFees, _Mapping]]
         ] = ...,
     ) -> None: ...
 
@@ -596,6 +613,10 @@ class MarketActivityTracker(_message.Message):
         "time_weighted_position_data_history",
         "time_weighted_notional_data_history",
         "returns_data_history",
+        "infra_fees",
+        "lp_paid_fees",
+        "realised_returns",
+        "realised_returns_history",
     )
     MARKET_FIELD_NUMBER: _ClassVar[int]
     ASSET_FIELD_NUMBER: _ClassVar[int]
@@ -615,6 +636,10 @@ class MarketActivityTracker(_message.Message):
     TIME_WEIGHTED_POSITION_DATA_HISTORY_FIELD_NUMBER: _ClassVar[int]
     TIME_WEIGHTED_NOTIONAL_DATA_HISTORY_FIELD_NUMBER: _ClassVar[int]
     RETURNS_DATA_HISTORY_FIELD_NUMBER: _ClassVar[int]
+    INFRA_FEES_FIELD_NUMBER: _ClassVar[int]
+    LP_PAID_FEES_FIELD_NUMBER: _ClassVar[int]
+    REALISED_RETURNS_FIELD_NUMBER: _ClassVar[int]
+    REALISED_RETURNS_HISTORY_FIELD_NUMBER: _ClassVar[int]
     market: str
     asset: str
     maker_fees_received: _containers.RepeatedCompositeFieldContainer[PartyFees]
@@ -639,6 +664,12 @@ class MarketActivityTracker(_message.Message):
         EpochTimeWeightedNotionalData
     ]
     returns_data_history: _containers.RepeatedCompositeFieldContainer[EpochReturnsData]
+    infra_fees: _containers.RepeatedCompositeFieldContainer[PartyFees]
+    lp_paid_fees: _containers.RepeatedCompositeFieldContainer[PartyFees]
+    realised_returns: _containers.RepeatedCompositeFieldContainer[ReturnsData]
+    realised_returns_history: _containers.RepeatedCompositeFieldContainer[
+        EpochReturnsData
+    ]
     def __init__(
         self,
         market: _Optional[str] = ...,
@@ -672,6 +703,25 @@ class MarketActivityTracker(_message.Message):
         ] = ...,
         returns_data_history: _Optional[
             _Iterable[_Union[EpochReturnsData, _Mapping]]
+        ] = ...,
+        infra_fees: _Optional[_Iterable[_Union[PartyFees, _Mapping]]] = ...,
+        lp_paid_fees: _Optional[_Iterable[_Union[PartyFees, _Mapping]]] = ...,
+        realised_returns: _Optional[_Iterable[_Union[ReturnsData, _Mapping]]] = ...,
+        realised_returns_history: _Optional[
+            _Iterable[_Union[EpochReturnsData, _Mapping]]
+        ] = ...,
+    ) -> None: ...
+
+class EpochPartyTakerFees(_message.Message):
+    __slots__ = ("epoch_party_taker_fees_paid",)
+    EPOCH_PARTY_TAKER_FEES_PAID_FIELD_NUMBER: _ClassVar[int]
+    epoch_party_taker_fees_paid: _containers.RepeatedCompositeFieldContainer[
+        AssetMarketPartyTakerFees
+    ]
+    def __init__(
+        self,
+        epoch_party_taker_fees_paid: _Optional[
+            _Iterable[_Union[AssetMarketPartyTakerFees, _Mapping]]
         ] = ...,
     ) -> None: ...
 
@@ -719,6 +769,31 @@ class PartyTimeWeightedPosition(_message.Message):
     tw_position: int
     def __init__(
         self, party: _Optional[str] = ..., tw_position: _Optional[int] = ...
+    ) -> None: ...
+
+class AssetMarketPartyTakerFees(_message.Message):
+    __slots__ = ("asset", "market", "taker_fees")
+    ASSET_FIELD_NUMBER: _ClassVar[int]
+    MARKET_FIELD_NUMBER: _ClassVar[int]
+    TAKER_FEES_FIELD_NUMBER: _ClassVar[int]
+    asset: str
+    market: str
+    taker_fees: _containers.RepeatedCompositeFieldContainer[PartyTakerFees]
+    def __init__(
+        self,
+        asset: _Optional[str] = ...,
+        market: _Optional[str] = ...,
+        taker_fees: _Optional[_Iterable[_Union[PartyTakerFees, _Mapping]]] = ...,
+    ) -> None: ...
+
+class PartyTakerFees(_message.Message):
+    __slots__ = ("party", "taker_fees")
+    PARTY_FIELD_NUMBER: _ClassVar[int]
+    TAKER_FEES_FIELD_NUMBER: _ClassVar[int]
+    party: str
+    taker_fees: bytes
+    def __init__(
+        self, party: _Optional[str] = ..., taker_fees: _Optional[bytes] = ...
     ) -> None: ...
 
 class EpochPartyFees(_message.Message):
@@ -840,6 +915,7 @@ class AssetAction(_message.Message):
         "erc20_asset_limits_updated",
         "erc20_bridge_stopped",
         "erc20_bridge_resumed",
+        "chain_id",
     )
     ID_FIELD_NUMBER: _ClassVar[int]
     STATE_FIELD_NUMBER: _ClassVar[int]
@@ -853,6 +929,7 @@ class AssetAction(_message.Message):
     ERC20_ASSET_LIMITS_UPDATED_FIELD_NUMBER: _ClassVar[int]
     ERC20_BRIDGE_STOPPED_FIELD_NUMBER: _ClassVar[int]
     ERC20_BRIDGE_RESUMED_FIELD_NUMBER: _ClassVar[int]
+    CHAIN_ID_FIELD_NUMBER: _ClassVar[int]
     id: str
     state: int
     asset: str
@@ -865,6 +942,7 @@ class AssetAction(_message.Message):
     erc20_asset_limits_updated: _chain_events_pb2.ERC20AssetLimitsUpdated
     erc20_bridge_stopped: bool
     erc20_bridge_resumed: bool
+    chain_id: str
     def __init__(
         self,
         id: _Optional[str] = ...,
@@ -885,6 +963,7 @@ class AssetAction(_message.Message):
         ] = ...,
         erc20_bridge_stopped: bool = ...,
         erc20_bridge_resumed: bool = ...,
+        chain_id: _Optional[str] = ...,
     ) -> None: ...
 
 class ELSShare(_message.Message):

@@ -72,6 +72,7 @@ class ProposalError(int, metaclass=_enum_type_wrapper.EnumTypeWrapper):
     PROPOSAL_ERROR_INVALID_VOLUME_DISCOUNT_PROGRAM: _ClassVar[ProposalError]
     PROPOSAL_ERROR_PROPOSAL_IN_BATCH_REJECTED: _ClassVar[ProposalError]
     PROPOSAL_ERROR_PROPOSAL_IN_BATCH_DECLINED: _ClassVar[ProposalError]
+    PROPOSAL_ERROR_INVALID_SIZE_DECIMAL_PLACES: _ClassVar[ProposalError]
 
 class MarketStateUpdateType(int, metaclass=_enum_type_wrapper.EnumTypeWrapper):
     __slots__ = ()
@@ -140,6 +141,7 @@ PROPOSAL_ERROR_INVALID_REFERRAL_PROGRAM: ProposalError
 PROPOSAL_ERROR_INVALID_VOLUME_DISCOUNT_PROGRAM: ProposalError
 PROPOSAL_ERROR_PROPOSAL_IN_BATCH_REJECTED: ProposalError
 PROPOSAL_ERROR_PROPOSAL_IN_BATCH_DECLINED: ProposalError
+PROPOSAL_ERROR_INVALID_SIZE_DECIMAL_PLACES: ProposalError
 MARKET_STATE_UPDATE_TYPE_UNSPECIFIED: MarketStateUpdateType
 MARKET_STATE_UPDATE_TYPE_TERMINATE: MarketStateUpdateType
 MARKET_STATE_UPDATE_TYPE_SUSPEND: MarketStateUpdateType
@@ -149,18 +151,13 @@ GOVERNANCE_TRANSFER_TYPE_ALL_OR_NOTHING: GovernanceTransferType
 GOVERNANCE_TRANSFER_TYPE_BEST_EFFORT: GovernanceTransferType
 
 class SpotProduct(_message.Message):
-    __slots__ = ("base_asset", "quote_asset", "name")
+    __slots__ = ("base_asset", "quote_asset")
     BASE_ASSET_FIELD_NUMBER: _ClassVar[int]
     QUOTE_ASSET_FIELD_NUMBER: _ClassVar[int]
-    NAME_FIELD_NUMBER: _ClassVar[int]
     base_asset: str
     quote_asset: str
-    name: str
     def __init__(
-        self,
-        base_asset: _Optional[str] = ...,
-        quote_asset: _Optional[str] = ...,
-        name: _Optional[str] = ...,
+        self, base_asset: _Optional[str] = ..., quote_asset: _Optional[str] = ...
     ) -> None: ...
 
 class FutureProduct(_message.Message):
@@ -287,43 +284,43 @@ class InstrumentConfiguration(_message.Message):
 class NewSpotMarketConfiguration(_message.Message):
     __slots__ = (
         "instrument",
-        "decimal_places",
+        "price_decimal_places",
         "metadata",
         "price_monitoring_parameters",
         "target_stake_parameters",
         "simple",
         "log_normal",
-        "position_decimal_places",
+        "size_decimal_places",
         "sla_params",
         "liquidity_fee_settings",
         "tick_size",
     )
     INSTRUMENT_FIELD_NUMBER: _ClassVar[int]
-    DECIMAL_PLACES_FIELD_NUMBER: _ClassVar[int]
+    PRICE_DECIMAL_PLACES_FIELD_NUMBER: _ClassVar[int]
     METADATA_FIELD_NUMBER: _ClassVar[int]
     PRICE_MONITORING_PARAMETERS_FIELD_NUMBER: _ClassVar[int]
     TARGET_STAKE_PARAMETERS_FIELD_NUMBER: _ClassVar[int]
     SIMPLE_FIELD_NUMBER: _ClassVar[int]
     LOG_NORMAL_FIELD_NUMBER: _ClassVar[int]
-    POSITION_DECIMAL_PLACES_FIELD_NUMBER: _ClassVar[int]
+    SIZE_DECIMAL_PLACES_FIELD_NUMBER: _ClassVar[int]
     SLA_PARAMS_FIELD_NUMBER: _ClassVar[int]
     LIQUIDITY_FEE_SETTINGS_FIELD_NUMBER: _ClassVar[int]
     TICK_SIZE_FIELD_NUMBER: _ClassVar[int]
     instrument: InstrumentConfiguration
-    decimal_places: int
+    price_decimal_places: int
     metadata: _containers.RepeatedScalarFieldContainer[str]
     price_monitoring_parameters: _markets_pb2.PriceMonitoringParameters
     target_stake_parameters: _markets_pb2.TargetStakeParameters
     simple: _markets_pb2.SimpleModelParams
     log_normal: _markets_pb2.LogNormalRiskModel
-    position_decimal_places: int
+    size_decimal_places: int
     sla_params: _markets_pb2.LiquiditySLAParameters
     liquidity_fee_settings: _markets_pb2.LiquidityFeeSettings
     tick_size: str
     def __init__(
         self,
         instrument: _Optional[_Union[InstrumentConfiguration, _Mapping]] = ...,
-        decimal_places: _Optional[int] = ...,
+        price_decimal_places: _Optional[int] = ...,
         metadata: _Optional[_Iterable[str]] = ...,
         price_monitoring_parameters: _Optional[
             _Union[_markets_pb2.PriceMonitoringParameters, _Mapping]
@@ -333,7 +330,7 @@ class NewSpotMarketConfiguration(_message.Message):
         ] = ...,
         simple: _Optional[_Union[_markets_pb2.SimpleModelParams, _Mapping]] = ...,
         log_normal: _Optional[_Union[_markets_pb2.LogNormalRiskModel, _Mapping]] = ...,
-        position_decimal_places: _Optional[int] = ...,
+        size_decimal_places: _Optional[int] = ...,
         sla_params: _Optional[
             _Union[_markets_pb2.LiquiditySLAParameters, _Mapping]
         ] = ...,
@@ -567,6 +564,7 @@ class UpdateSpotMarketConfiguration(_message.Message):
         "sla_params",
         "liquidity_fee_settings",
         "tick_size",
+        "instrument",
     )
     METADATA_FIELD_NUMBER: _ClassVar[int]
     PRICE_MONITORING_PARAMETERS_FIELD_NUMBER: _ClassVar[int]
@@ -576,6 +574,7 @@ class UpdateSpotMarketConfiguration(_message.Message):
     SLA_PARAMS_FIELD_NUMBER: _ClassVar[int]
     LIQUIDITY_FEE_SETTINGS_FIELD_NUMBER: _ClassVar[int]
     TICK_SIZE_FIELD_NUMBER: _ClassVar[int]
+    INSTRUMENT_FIELD_NUMBER: _ClassVar[int]
     metadata: _containers.RepeatedScalarFieldContainer[str]
     price_monitoring_parameters: _markets_pb2.PriceMonitoringParameters
     target_stake_parameters: _markets_pb2.TargetStakeParameters
@@ -584,6 +583,7 @@ class UpdateSpotMarketConfiguration(_message.Message):
     sla_params: _markets_pb2.LiquiditySLAParameters
     liquidity_fee_settings: _markets_pb2.LiquidityFeeSettings
     tick_size: str
+    instrument: UpdateSpotInstrumentConfiguration
     def __init__(
         self,
         metadata: _Optional[_Iterable[str]] = ...,
@@ -602,6 +602,19 @@ class UpdateSpotMarketConfiguration(_message.Message):
             _Union[_markets_pb2.LiquidityFeeSettings, _Mapping]
         ] = ...,
         tick_size: _Optional[str] = ...,
+        instrument: _Optional[
+            _Union[UpdateSpotInstrumentConfiguration, _Mapping]
+        ] = ...,
+    ) -> None: ...
+
+class UpdateSpotInstrumentConfiguration(_message.Message):
+    __slots__ = ("code", "name")
+    CODE_FIELD_NUMBER: _ClassVar[int]
+    NAME_FIELD_NUMBER: _ClassVar[int]
+    code: str
+    name: str
+    def __init__(
+        self, code: _Optional[str] = ..., name: _Optional[str] = ...
     ) -> None: ...
 
 class UpdateInstrumentConfiguration(_message.Message):
@@ -826,6 +839,7 @@ class ProposalTerms(_message.Message):
 class BatchProposalTermsChange(_message.Message):
     __slots__ = (
         "enactment_timestamp",
+        "validation_timestamp",
         "update_market",
         "new_market",
         "update_network_parameter",
@@ -838,8 +852,10 @@ class BatchProposalTermsChange(_message.Message):
         "update_market_state",
         "update_referral_program",
         "update_volume_discount_program",
+        "new_asset",
     )
     ENACTMENT_TIMESTAMP_FIELD_NUMBER: _ClassVar[int]
+    VALIDATION_TIMESTAMP_FIELD_NUMBER: _ClassVar[int]
     UPDATE_MARKET_FIELD_NUMBER: _ClassVar[int]
     NEW_MARKET_FIELD_NUMBER: _ClassVar[int]
     UPDATE_NETWORK_PARAMETER_FIELD_NUMBER: _ClassVar[int]
@@ -852,7 +868,9 @@ class BatchProposalTermsChange(_message.Message):
     UPDATE_MARKET_STATE_FIELD_NUMBER: _ClassVar[int]
     UPDATE_REFERRAL_PROGRAM_FIELD_NUMBER: _ClassVar[int]
     UPDATE_VOLUME_DISCOUNT_PROGRAM_FIELD_NUMBER: _ClassVar[int]
+    NEW_ASSET_FIELD_NUMBER: _ClassVar[int]
     enactment_timestamp: int
+    validation_timestamp: int
     update_market: UpdateMarket
     new_market: NewMarket
     update_network_parameter: UpdateNetworkParameter
@@ -865,9 +883,11 @@ class BatchProposalTermsChange(_message.Message):
     update_market_state: UpdateMarketState
     update_referral_program: UpdateReferralProgram
     update_volume_discount_program: UpdateVolumeDiscountProgram
+    new_asset: NewAsset
     def __init__(
         self,
         enactment_timestamp: _Optional[int] = ...,
+        validation_timestamp: _Optional[int] = ...,
         update_market: _Optional[_Union[UpdateMarket, _Mapping]] = ...,
         new_market: _Optional[_Union[NewMarket, _Mapping]] = ...,
         update_network_parameter: _Optional[
@@ -886,6 +906,7 @@ class BatchProposalTermsChange(_message.Message):
         update_volume_discount_program: _Optional[
             _Union[UpdateVolumeDiscountProgram, _Mapping]
         ] = ...,
+        new_asset: _Optional[_Union[NewAsset, _Mapping]] = ...,
     ) -> None: ...
 
 class ProposalParameters(_message.Message):

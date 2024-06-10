@@ -168,7 +168,7 @@ class Payload(_message.Message):
         "proof_of_work",
         "pending_asset_updates",
         "protocol_upgrade_proposals",
-        "banking_bridge_state",
+        "banking_primary_bridge_state",
         "settlement_state",
         "liquidity_scores",
         "spot_liquidity_target",
@@ -196,6 +196,8 @@ class Payload(_message.Message):
         "parties",
         "l2_eth_oracles",
         "eth_oracle_verifier_misc",
+        "banking_evm_bridge_states",
+        "evm_multisig_topologies",
     )
     ACTIVE_ASSETS_FIELD_NUMBER: _ClassVar[int]
     PENDING_ASSETS_FIELD_NUMBER: _ClassVar[int]
@@ -247,7 +249,7 @@ class Payload(_message.Message):
     PROOF_OF_WORK_FIELD_NUMBER: _ClassVar[int]
     PENDING_ASSET_UPDATES_FIELD_NUMBER: _ClassVar[int]
     PROTOCOL_UPGRADE_PROPOSALS_FIELD_NUMBER: _ClassVar[int]
-    BANKING_BRIDGE_STATE_FIELD_NUMBER: _ClassVar[int]
+    BANKING_PRIMARY_BRIDGE_STATE_FIELD_NUMBER: _ClassVar[int]
     SETTLEMENT_STATE_FIELD_NUMBER: _ClassVar[int]
     LIQUIDITY_SCORES_FIELD_NUMBER: _ClassVar[int]
     SPOT_LIQUIDITY_TARGET_FIELD_NUMBER: _ClassVar[int]
@@ -275,6 +277,8 @@ class Payload(_message.Message):
     PARTIES_FIELD_NUMBER: _ClassVar[int]
     L2_ETH_ORACLES_FIELD_NUMBER: _ClassVar[int]
     ETH_ORACLE_VERIFIER_MISC_FIELD_NUMBER: _ClassVar[int]
+    BANKING_EVM_BRIDGE_STATES_FIELD_NUMBER: _ClassVar[int]
+    EVM_MULTISIG_TOPOLOGIES_FIELD_NUMBER: _ClassVar[int]
     active_assets: ActiveAssets
     pending_assets: PendingAssets
     banking_withdrawals: BankingWithdrawals
@@ -325,7 +329,7 @@ class Payload(_message.Message):
     proof_of_work: ProofOfWork
     pending_asset_updates: PendingAssetUpdates
     protocol_upgrade_proposals: ProtocolUpgradeProposals
-    banking_bridge_state: BankingBridgeState
+    banking_primary_bridge_state: BankingBridgeState
     settlement_state: SettlementState
     liquidity_scores: LiquidityScores
     spot_liquidity_target: SpotLiquidityTarget
@@ -353,6 +357,8 @@ class Payload(_message.Message):
     parties: Parties
     l2_eth_oracles: L2EthOracles
     eth_oracle_verifier_misc: EthOracleVerifierMisc
+    banking_evm_bridge_states: BankingEVMBridgeStates
+    evm_multisig_topologies: EVMMultisigTopologies
     def __init__(
         self,
         active_assets: _Optional[_Union[ActiveAssets, _Mapping]] = ...,
@@ -429,7 +435,9 @@ class Payload(_message.Message):
         protocol_upgrade_proposals: _Optional[
             _Union[ProtocolUpgradeProposals, _Mapping]
         ] = ...,
-        banking_bridge_state: _Optional[_Union[BankingBridgeState, _Mapping]] = ...,
+        banking_primary_bridge_state: _Optional[
+            _Union[BankingBridgeState, _Mapping]
+        ] = ...,
         settlement_state: _Optional[_Union[SettlementState, _Mapping]] = ...,
         liquidity_scores: _Optional[_Union[LiquidityScores, _Mapping]] = ...,
         spot_liquidity_target: _Optional[_Union[SpotLiquidityTarget, _Mapping]] = ...,
@@ -484,6 +492,12 @@ class Payload(_message.Message):
         l2_eth_oracles: _Optional[_Union[L2EthOracles, _Mapping]] = ...,
         eth_oracle_verifier_misc: _Optional[
             _Union[EthOracleVerifierMisc, _Mapping]
+        ] = ...,
+        banking_evm_bridge_states: _Optional[
+            _Union[BankingEVMBridgeStates, _Mapping]
+        ] = ...,
+        evm_multisig_topologies: _Optional[
+            _Union[EVMMultisigTopologies, _Mapping]
         ] = ...,
     ) -> None: ...
 
@@ -712,15 +726,18 @@ class EventForwarderBucket(_message.Message):
     ) -> None: ...
 
 class EventForwarder(_message.Message):
-    __slots__ = ("acked_events", "buckets")
+    __slots__ = ("acked_events", "buckets", "chain_id")
     ACKED_EVENTS_FIELD_NUMBER: _ClassVar[int]
     BUCKETS_FIELD_NUMBER: _ClassVar[int]
+    CHAIN_ID_FIELD_NUMBER: _ClassVar[int]
     acked_events: _containers.RepeatedScalarFieldContainer[str]
     buckets: _containers.RepeatedCompositeFieldContainer[EventForwarderBucket]
+    chain_id: str
     def __init__(
         self,
         acked_events: _Optional[_Iterable[str]] = ...,
         buckets: _Optional[_Iterable[_Union[EventForwarderBucket, _Mapping]]] = ...,
+        chain_id: _Optional[str] = ...,
     ) -> None: ...
 
 class CollateralAccounts(_message.Message):
@@ -792,21 +809,24 @@ class Deposit(_message.Message):
     ) -> None: ...
 
 class TxRef(_message.Message):
-    __slots__ = ("asset", "block_nr", "hash", "log_index")
+    __slots__ = ("asset", "block_nr", "hash", "log_index", "chain_id")
     ASSET_FIELD_NUMBER: _ClassVar[int]
     BLOCK_NR_FIELD_NUMBER: _ClassVar[int]
     HASH_FIELD_NUMBER: _ClassVar[int]
     LOG_INDEX_FIELD_NUMBER: _ClassVar[int]
+    CHAIN_ID_FIELD_NUMBER: _ClassVar[int]
     asset: str
     block_nr: int
     hash: str
     log_index: int
+    chain_id: str
     def __init__(
         self,
         asset: _Optional[str] = ...,
         block_nr: _Optional[int] = ...,
         hash: _Optional[str] = ...,
         log_index: _Optional[int] = ...,
+        chain_id: _Optional[str] = ...,
     ) -> None: ...
 
 class BankingWithdrawals(_message.Message):
@@ -826,15 +846,18 @@ class BankingDeposits(_message.Message):
     ) -> None: ...
 
 class BankingSeen(_message.Message):
-    __slots__ = ("refs", "last_seen_eth_block")
+    __slots__ = ("refs", "last_seen_primary_eth_block", "last_seen_secondary_eth_block")
     REFS_FIELD_NUMBER: _ClassVar[int]
-    LAST_SEEN_ETH_BLOCK_FIELD_NUMBER: _ClassVar[int]
+    LAST_SEEN_PRIMARY_ETH_BLOCK_FIELD_NUMBER: _ClassVar[int]
+    LAST_SEEN_SECONDARY_ETH_BLOCK_FIELD_NUMBER: _ClassVar[int]
     refs: _containers.RepeatedScalarFieldContainer[str]
-    last_seen_eth_block: int
+    last_seen_primary_eth_block: int
+    last_seen_secondary_eth_block: int
     def __init__(
         self,
         refs: _Optional[_Iterable[str]] = ...,
-        last_seen_eth_block: _Optional[int] = ...,
+        last_seen_primary_eth_block: _Optional[int] = ...,
+        last_seen_secondary_eth_block: _Optional[int] = ...,
     ) -> None: ...
 
 class BankingAssetActions(_message.Message):
@@ -909,6 +932,19 @@ class BankingBridgeState(_message.Message):
     def __init__(
         self,
         bridge_state: _Optional[_Union[_checkpoint_pb2.BridgeState, _Mapping]] = ...,
+    ) -> None: ...
+
+class BankingEVMBridgeStates(_message.Message):
+    __slots__ = ("bridge_states",)
+    BRIDGE_STATES_FIELD_NUMBER: _ClassVar[int]
+    bridge_states: _containers.RepeatedCompositeFieldContainer[
+        _checkpoint_pb2.BridgeState
+    ]
+    def __init__(
+        self,
+        bridge_states: _Optional[
+            _Iterable[_Union[_checkpoint_pb2.BridgeState, _Mapping]]
+        ] = ...,
     ) -> None: ...
 
 class Checkpoint(_message.Message):
@@ -1012,17 +1048,22 @@ class GovernanceBatchActive(_message.Message):
     ) -> None: ...
 
 class GovernanceNode(_message.Message):
-    __slots__ = ("proposals", "proposal_data")
+    __slots__ = ("proposals", "proposal_data", "batch_proposal_data")
     PROPOSALS_FIELD_NUMBER: _ClassVar[int]
     PROPOSAL_DATA_FIELD_NUMBER: _ClassVar[int]
+    BATCH_PROPOSAL_DATA_FIELD_NUMBER: _ClassVar[int]
     proposals: _containers.RepeatedCompositeFieldContainer[_governance_pb2.Proposal]
     proposal_data: _containers.RepeatedCompositeFieldContainer[ProposalData]
+    batch_proposal_data: _containers.RepeatedCompositeFieldContainer[BatchProposalData]
     def __init__(
         self,
         proposals: _Optional[
             _Iterable[_Union[_governance_pb2.Proposal, _Mapping]]
         ] = ...,
         proposal_data: _Optional[_Iterable[_Union[ProposalData, _Mapping]]] = ...,
+        batch_proposal_data: _Optional[
+            _Iterable[_Union[BatchProposalData, _Mapping]]
+        ] = ...,
     ) -> None: ...
 
 class StakingAccount(_message.Message):
@@ -1167,15 +1208,18 @@ class PriceBound(_message.Message):
     ) -> None: ...
 
 class PriceRangeCache(_message.Message):
-    __slots__ = ("bound", "range")
+    __slots__ = ("bound", "range", "bound_index")
     BOUND_FIELD_NUMBER: _ClassVar[int]
     RANGE_FIELD_NUMBER: _ClassVar[int]
+    BOUND_INDEX_FIELD_NUMBER: _ClassVar[int]
     bound: PriceBound
     range: PriceRange
+    bound_index: int
     def __init__(
         self,
         bound: _Optional[_Union[PriceBound, _Mapping]] = ...,
         range: _Optional[_Union[PriceRange, _Mapping]] = ...,
+        bound_index: _Optional[int] = ...,
     ) -> None: ...
 
 class CurrentPrice(_message.Message):
@@ -1381,6 +1425,8 @@ class SpotMarket(_message.Message):
         "stop_orders",
         "expiring_stop_orders",
         "fees_stats",
+        "has_traded",
+        "market_liquidity",
     )
     MARKET_FIELD_NUMBER: _ClassVar[int]
     PRICE_MONITOR_FIELD_NUMBER: _ClassVar[int]
@@ -1403,6 +1449,8 @@ class SpotMarket(_message.Message):
     STOP_ORDERS_FIELD_NUMBER: _ClassVar[int]
     EXPIRING_STOP_ORDERS_FIELD_NUMBER: _ClassVar[int]
     FEES_STATS_FIELD_NUMBER: _ClassVar[int]
+    HAS_TRADED_FIELD_NUMBER: _ClassVar[int]
+    MARKET_LIQUIDITY_FIELD_NUMBER: _ClassVar[int]
     market: _markets_pb2.Market
     price_monitor: PriceMonitor
     auction_state: AuctionState
@@ -1424,6 +1472,8 @@ class SpotMarket(_message.Message):
     stop_orders: StopOrders
     expiring_stop_orders: _containers.RepeatedCompositeFieldContainer[_vega_pb2.Order]
     fees_stats: _events_pb2.FeesStats
+    has_traded: bool
+    market_liquidity: MarketLiquidity
     def __init__(
         self,
         market: _Optional[_Union[_markets_pb2.Market, _Mapping]] = ...,
@@ -1449,6 +1499,8 @@ class SpotMarket(_message.Message):
             _Iterable[_Union[_vega_pb2.Order, _Mapping]]
         ] = ...,
         fees_stats: _Optional[_Union[_events_pb2.FeesStats, _Mapping]] = ...,
+        has_traded: bool = ...,
+        market_liquidity: _Optional[_Union[MarketLiquidity, _Mapping]] = ...,
     ) -> None: ...
 
 class Market(_message.Message):
@@ -1484,6 +1536,7 @@ class Market(_message.Message):
         "mark_price_calculator",
         "internal_composite_price_calculator",
         "next_internal_composite_price_calc",
+        "market_liquidity",
     )
     MARKET_FIELD_NUMBER: _ClassVar[int]
     PRICE_MONITOR_FIELD_NUMBER: _ClassVar[int]
@@ -1516,6 +1569,7 @@ class Market(_message.Message):
     MARK_PRICE_CALCULATOR_FIELD_NUMBER: _ClassVar[int]
     INTERNAL_COMPOSITE_PRICE_CALCULATOR_FIELD_NUMBER: _ClassVar[int]
     NEXT_INTERNAL_COMPOSITE_PRICE_CALC_FIELD_NUMBER: _ClassVar[int]
+    MARKET_LIQUIDITY_FIELD_NUMBER: _ClassVar[int]
     market: _markets_pb2.Market
     price_monitor: PriceMonitor
     auction_state: AuctionState
@@ -1547,6 +1601,7 @@ class Market(_message.Message):
     mark_price_calculator: CompositePriceCalculator
     internal_composite_price_calculator: CompositePriceCalculator
     next_internal_composite_price_calc: int
+    market_liquidity: MarketLiquidity
     def __init__(
         self,
         market: _Optional[_Union[_markets_pb2.Market, _Mapping]] = ...,
@@ -1588,6 +1643,7 @@ class Market(_message.Message):
             _Union[CompositePriceCalculator, _Mapping]
         ] = ...,
         next_internal_composite_price_calc: _Optional[int] = ...,
+        market_liquidity: _Optional[_Union[MarketLiquidity, _Mapping]] = ...,
     ) -> None: ...
 
 class PartyMarginFactor(_message.Message):
@@ -2598,18 +2654,21 @@ class PendingERC20MultisigControlSignature(_message.Message):
     ) -> None: ...
 
 class IssuedERC20MultisigControlSignature(_message.Message):
-    __slots__ = ("resource_id", "ethereum_address", "submitter_address")
+    __slots__ = ("resource_id", "ethereum_address", "submitter_address", "chain_id")
     RESOURCE_ID_FIELD_NUMBER: _ClassVar[int]
     ETHEREUM_ADDRESS_FIELD_NUMBER: _ClassVar[int]
     SUBMITTER_ADDRESS_FIELD_NUMBER: _ClassVar[int]
+    CHAIN_ID_FIELD_NUMBER: _ClassVar[int]
     resource_id: str
     ethereum_address: str
     submitter_address: str
+    chain_id: str
     def __init__(
         self,
         resource_id: _Optional[str] = ...,
         ethereum_address: _Optional[str] = ...,
         submitter_address: _Optional[str] = ...,
+        chain_id: _Optional[str] = ...,
     ) -> None: ...
 
 class ValidatorState(_message.Message):
@@ -3111,10 +3170,12 @@ class MarketTracker(_message.Message):
         "market_activity",
         "taker_notional_volume",
         "market_to_party_taker_notional_volume",
+        "epoch_taker_fees",
     )
     MARKET_ACTIVITY_FIELD_NUMBER: _ClassVar[int]
     TAKER_NOTIONAL_VOLUME_FIELD_NUMBER: _ClassVar[int]
     MARKET_TO_PARTY_TAKER_NOTIONAL_VOLUME_FIELD_NUMBER: _ClassVar[int]
+    EPOCH_TAKER_FEES_FIELD_NUMBER: _ClassVar[int]
     market_activity: _containers.RepeatedCompositeFieldContainer[
         _checkpoint_pb2.MarketActivityTracker
     ]
@@ -3123,6 +3184,9 @@ class MarketTracker(_message.Message):
     ]
     market_to_party_taker_notional_volume: _containers.RepeatedCompositeFieldContainer[
         _checkpoint_pb2.MarketToPartyTakerNotionalVolume
+    ]
+    epoch_taker_fees: _containers.RepeatedCompositeFieldContainer[
+        _checkpoint_pb2.EpochPartyTakerFees
     ]
     def __init__(
         self,
@@ -3136,6 +3200,9 @@ class MarketTracker(_message.Message):
             _Iterable[
                 _Union[_checkpoint_pb2.MarketToPartyTakerNotionalVolume, _Mapping]
             ]
+        ] = ...,
+        epoch_taker_fees: _Optional[
+            _Iterable[_Union[_checkpoint_pb2.EpochPartyTakerFees, _Mapping]]
         ] = ...,
     ) -> None: ...
 
@@ -3208,6 +3275,34 @@ class ERC20MultiSigTopologyPending(_message.Message):
         ] = ...,
         witnessed_signers: _Optional[_Iterable[str]] = ...,
         witnessed_threshold_sets: _Optional[_Iterable[str]] = ...,
+    ) -> None: ...
+
+class EVMMultisigTopology(_message.Message):
+    __slots__ = ("chain_id", "verified", "pending")
+    CHAIN_ID_FIELD_NUMBER: _ClassVar[int]
+    VERIFIED_FIELD_NUMBER: _ClassVar[int]
+    PENDING_FIELD_NUMBER: _ClassVar[int]
+    chain_id: str
+    verified: ERC20MultiSigTopologyVerified
+    pending: ERC20MultiSigTopologyPending
+    def __init__(
+        self,
+        chain_id: _Optional[str] = ...,
+        verified: _Optional[_Union[ERC20MultiSigTopologyVerified, _Mapping]] = ...,
+        pending: _Optional[_Union[ERC20MultiSigTopologyPending, _Mapping]] = ...,
+    ) -> None: ...
+
+class EVMMultisigTopologies(_message.Message):
+    __slots__ = ("evm_multisig_topology",)
+    EVM_MULTISIG_TOPOLOGY_FIELD_NUMBER: _ClassVar[int]
+    evm_multisig_topology: _containers.RepeatedCompositeFieldContainer[
+        EVMMultisigTopology
+    ]
+    def __init__(
+        self,
+        evm_multisig_topology: _Optional[
+            _Iterable[_Union[EVMMultisigTopology, _Mapping]]
+        ] = ...,
     ) -> None: ...
 
 class ProofOfWork(_message.Message):
@@ -3869,3 +3964,9 @@ class PartyProfile(_message.Message):
         alias: _Optional[str] = ...,
         metadata: _Optional[_Iterable[_Union[_vega_pb2.Metadata, _Mapping]]] = ...,
     ) -> None: ...
+
+class MarketLiquidity(_message.Message):
+    __slots__ = ("price_range",)
+    PRICE_RANGE_FIELD_NUMBER: _ClassVar[int]
+    price_range: str
+    def __init__(self, price_range: _Optional[str] = ...) -> None: ...
