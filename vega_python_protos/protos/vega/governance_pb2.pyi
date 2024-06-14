@@ -167,17 +167,20 @@ class FutureProduct(_message.Message):
         "data_source_spec_for_settlement_data",
         "data_source_spec_for_trading_termination",
         "data_source_spec_binding",
+        "cap",
     )
     SETTLEMENT_ASSET_FIELD_NUMBER: _ClassVar[int]
     QUOTE_NAME_FIELD_NUMBER: _ClassVar[int]
     DATA_SOURCE_SPEC_FOR_SETTLEMENT_DATA_FIELD_NUMBER: _ClassVar[int]
     DATA_SOURCE_SPEC_FOR_TRADING_TERMINATION_FIELD_NUMBER: _ClassVar[int]
     DATA_SOURCE_SPEC_BINDING_FIELD_NUMBER: _ClassVar[int]
+    CAP_FIELD_NUMBER: _ClassVar[int]
     settlement_asset: str
     quote_name: str
     data_source_spec_for_settlement_data: _data_source_pb2.DataSourceDefinition
     data_source_spec_for_trading_termination: _data_source_pb2.DataSourceDefinition
     data_source_spec_binding: _markets_pb2.DataSourceSpecToFutureBinding
+    cap: _markets_pb2.FutureCap
     def __init__(
         self,
         settlement_asset: _Optional[str] = ...,
@@ -191,6 +194,7 @@ class FutureProduct(_message.Message):
         data_source_spec_binding: _Optional[
             _Union[_markets_pb2.DataSourceSpecToFutureBinding, _Mapping]
         ] = ...,
+        cap: _Optional[_Union[_markets_pb2.FutureCap, _Mapping]] = ...,
     ) -> None: ...
 
 class PerpetualProduct(_message.Message):
@@ -294,6 +298,7 @@ class NewSpotMarketConfiguration(_message.Message):
         "sla_params",
         "liquidity_fee_settings",
         "tick_size",
+        "enable_transaction_reordering",
     )
     INSTRUMENT_FIELD_NUMBER: _ClassVar[int]
     PRICE_DECIMAL_PLACES_FIELD_NUMBER: _ClassVar[int]
@@ -306,6 +311,7 @@ class NewSpotMarketConfiguration(_message.Message):
     SLA_PARAMS_FIELD_NUMBER: _ClassVar[int]
     LIQUIDITY_FEE_SETTINGS_FIELD_NUMBER: _ClassVar[int]
     TICK_SIZE_FIELD_NUMBER: _ClassVar[int]
+    ENABLE_TRANSACTION_REORDERING_FIELD_NUMBER: _ClassVar[int]
     instrument: InstrumentConfiguration
     price_decimal_places: int
     metadata: _containers.RepeatedScalarFieldContainer[str]
@@ -317,6 +323,7 @@ class NewSpotMarketConfiguration(_message.Message):
     sla_params: _markets_pb2.LiquiditySLAParameters
     liquidity_fee_settings: _markets_pb2.LiquidityFeeSettings
     tick_size: str
+    enable_transaction_reordering: bool
     def __init__(
         self,
         instrument: _Optional[_Union[InstrumentConfiguration, _Mapping]] = ...,
@@ -338,6 +345,7 @@ class NewSpotMarketConfiguration(_message.Message):
             _Union[_markets_pb2.LiquidityFeeSettings, _Mapping]
         ] = ...,
         tick_size: _Optional[str] = ...,
+        enable_transaction_reordering: bool = ...,
     ) -> None: ...
 
 class NewMarketConfiguration(_message.Message):
@@ -359,6 +367,7 @@ class NewMarketConfiguration(_message.Message):
         "liquidation_strategy",
         "mark_price_configuration",
         "tick_size",
+        "enable_transaction_reordering",
     )
     INSTRUMENT_FIELD_NUMBER: _ClassVar[int]
     DECIMAL_PLACES_FIELD_NUMBER: _ClassVar[int]
@@ -377,6 +386,7 @@ class NewMarketConfiguration(_message.Message):
     LIQUIDATION_STRATEGY_FIELD_NUMBER: _ClassVar[int]
     MARK_PRICE_CONFIGURATION_FIELD_NUMBER: _ClassVar[int]
     TICK_SIZE_FIELD_NUMBER: _ClassVar[int]
+    ENABLE_TRANSACTION_REORDERING_FIELD_NUMBER: _ClassVar[int]
     instrument: InstrumentConfiguration
     decimal_places: int
     metadata: _containers.RepeatedScalarFieldContainer[str]
@@ -394,6 +404,7 @@ class NewMarketConfiguration(_message.Message):
     liquidation_strategy: _markets_pb2.LiquidationStrategy
     mark_price_configuration: _markets_pb2.CompositePriceConfiguration
     tick_size: str
+    enable_transaction_reordering: bool
     def __init__(
         self,
         instrument: _Optional[_Union[InstrumentConfiguration, _Mapping]] = ...,
@@ -425,6 +436,7 @@ class NewMarketConfiguration(_message.Message):
             _Union[_markets_pb2.CompositePriceConfiguration, _Mapping]
         ] = ...,
         tick_size: _Optional[str] = ...,
+        enable_transaction_reordering: bool = ...,
     ) -> None: ...
 
 class NewSpotMarket(_message.Message):
@@ -495,6 +507,7 @@ class UpdateMarketConfiguration(_message.Message):
         "liquidation_strategy",
         "mark_price_configuration",
         "tick_size",
+        "enable_transaction_reordering",
     )
     INSTRUMENT_FIELD_NUMBER: _ClassVar[int]
     METADATA_FIELD_NUMBER: _ClassVar[int]
@@ -510,6 +523,7 @@ class UpdateMarketConfiguration(_message.Message):
     LIQUIDATION_STRATEGY_FIELD_NUMBER: _ClassVar[int]
     MARK_PRICE_CONFIGURATION_FIELD_NUMBER: _ClassVar[int]
     TICK_SIZE_FIELD_NUMBER: _ClassVar[int]
+    ENABLE_TRANSACTION_REORDERING_FIELD_NUMBER: _ClassVar[int]
     instrument: UpdateInstrumentConfiguration
     metadata: _containers.RepeatedScalarFieldContainer[str]
     price_monitoring_parameters: _markets_pb2.PriceMonitoringParameters
@@ -524,6 +538,7 @@ class UpdateMarketConfiguration(_message.Message):
     liquidation_strategy: _markets_pb2.LiquidationStrategy
     mark_price_configuration: _markets_pb2.CompositePriceConfiguration
     tick_size: str
+    enable_transaction_reordering: bool
     def __init__(
         self,
         instrument: _Optional[_Union[UpdateInstrumentConfiguration, _Mapping]] = ...,
@@ -552,6 +567,7 @@ class UpdateMarketConfiguration(_message.Message):
             _Union[_markets_pb2.CompositePriceConfiguration, _Mapping]
         ] = ...,
         tick_size: _Optional[str] = ...,
+        enable_transaction_reordering: bool = ...,
     ) -> None: ...
 
 class UpdateSpotMarketConfiguration(_message.Message):
@@ -565,6 +581,7 @@ class UpdateSpotMarketConfiguration(_message.Message):
         "liquidity_fee_settings",
         "tick_size",
         "instrument",
+        "enable_transaction_reordering",
     )
     METADATA_FIELD_NUMBER: _ClassVar[int]
     PRICE_MONITORING_PARAMETERS_FIELD_NUMBER: _ClassVar[int]
@@ -575,6 +592,7 @@ class UpdateSpotMarketConfiguration(_message.Message):
     LIQUIDITY_FEE_SETTINGS_FIELD_NUMBER: _ClassVar[int]
     TICK_SIZE_FIELD_NUMBER: _ClassVar[int]
     INSTRUMENT_FIELD_NUMBER: _ClassVar[int]
+    ENABLE_TRANSACTION_REORDERING_FIELD_NUMBER: _ClassVar[int]
     metadata: _containers.RepeatedScalarFieldContainer[str]
     price_monitoring_parameters: _markets_pb2.PriceMonitoringParameters
     target_stake_parameters: _markets_pb2.TargetStakeParameters
@@ -584,6 +602,7 @@ class UpdateSpotMarketConfiguration(_message.Message):
     liquidity_fee_settings: _markets_pb2.LiquidityFeeSettings
     tick_size: str
     instrument: UpdateSpotInstrumentConfiguration
+    enable_transaction_reordering: bool
     def __init__(
         self,
         metadata: _Optional[_Iterable[str]] = ...,
@@ -605,6 +624,7 @@ class UpdateSpotMarketConfiguration(_message.Message):
         instrument: _Optional[
             _Union[UpdateSpotInstrumentConfiguration, _Mapping]
         ] = ...,
+        enable_transaction_reordering: bool = ...,
     ) -> None: ...
 
 class UpdateSpotInstrumentConfiguration(_message.Message):
@@ -1360,13 +1380,15 @@ class OneOffTransfer(_message.Message):
     def __init__(self, deliver_on: _Optional[int] = ...) -> None: ...
 
 class RecurringTransfer(_message.Message):
-    __slots__ = ("start_epoch", "end_epoch", "dispatch_strategy")
+    __slots__ = ("start_epoch", "end_epoch", "dispatch_strategy", "factor")
     START_EPOCH_FIELD_NUMBER: _ClassVar[int]
     END_EPOCH_FIELD_NUMBER: _ClassVar[int]
     DISPATCH_STRATEGY_FIELD_NUMBER: _ClassVar[int]
+    FACTOR_FIELD_NUMBER: _ClassVar[int]
     start_epoch: int
     end_epoch: int
     dispatch_strategy: _vega_pb2.DispatchStrategy
+    factor: str
     def __init__(
         self,
         start_epoch: _Optional[int] = ...,
@@ -1374,4 +1396,5 @@ class RecurringTransfer(_message.Message):
         dispatch_strategy: _Optional[
             _Union[_vega_pb2.DispatchStrategy, _Mapping]
         ] = ...,
+        factor: _Optional[str] = ...,
     ) -> None: ...

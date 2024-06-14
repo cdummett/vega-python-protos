@@ -71,6 +71,18 @@ class TradingDataServiceStub(object):
             response_deserializer=data__node_dot_api_dot_v2_dot_trading__data__pb2.ListStopOrdersResponse.FromString,
             _registered_method=True,
         )
+        self.ListGameTeamScores = channel.unary_unary(
+            "/datanode.api.v2.TradingDataService/ListGameTeamScores",
+            request_serializer=data__node_dot_api_dot_v2_dot_trading__data__pb2.ListGameTeamScoresRequest.SerializeToString,
+            response_deserializer=data__node_dot_api_dot_v2_dot_trading__data__pb2.ListGameTeamScoresResponse.FromString,
+            _registered_method=True,
+        )
+        self.ListGamePartyScores = channel.unary_unary(
+            "/datanode.api.v2.TradingDataService/ListGamePartyScores",
+            request_serializer=data__node_dot_api_dot_v2_dot_trading__data__pb2.ListGamePartyScoresRequest.SerializeToString,
+            response_deserializer=data__node_dot_api_dot_v2_dot_trading__data__pb2.ListGamePartyScoresResponse.FromString,
+            _registered_method=True,
+        )
         self.ListPositions = channel.unary_unary(
             "/datanode.api.v2.TradingDataService/ListPositions",
             request_serializer=data__node_dot_api_dot_v2_dot_trading__data__pb2.ListPositionsRequest.SerializeToString,
@@ -731,6 +743,12 @@ class TradingDataServiceStub(object):
             response_deserializer=data__node_dot_api_dot_v2_dot_trading__data__pb2.GetTimeWeightedNotionalPositionResponse.FromString,
             _registered_method=True,
         )
+        self.ListAMMs = channel.unary_unary(
+            "/datanode.api.v2.TradingDataService/ListAMMs",
+            request_serializer=data__node_dot_api_dot_v2_dot_trading__data__pb2.ListAMMsRequest.SerializeToString,
+            response_deserializer=data__node_dot_api_dot_v2_dot_trading__data__pb2.ListAMMsResponse.FromString,
+            _registered_method=True,
+        )
         self.ExportNetworkHistory = channel.unary_stream(
             "/datanode.api.v2.TradingDataService/ExportNetworkHistory",
             request_serializer=data__node_dot_api_dot_v2_dot_trading__data__pb2.ExportNetworkHistoryRequest.SerializeToString,
@@ -827,6 +845,24 @@ class TradingDataServiceServicer(object):
         """List stop orders
 
         Get a list of stop orders that match the given filters
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details("Method not implemented!")
+        raise NotImplementedError("Method not implemented!")
+
+    def ListGameTeamScores(self, request, context):
+        """List game team scores
+
+        Get a list of team scores for the given filters
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details("Method not implemented!")
+        raise NotImplementedError("Method not implemented!")
+
+    def ListGamePartyScores(self, request, context):
+        """List game party scores
+
+        Get a list of party scores for the given filters
         """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details("Method not implemented!")
@@ -1007,7 +1043,8 @@ class TradingDataServiceServicer(object):
     def ListCandleData(self, request, context):
         """List candle data
 
-        Get a list of candle data for a given candle ID. Candle IDs can be obtained by calling list-candle-intervals
+        Get a list of candle data for a given candle ID.
+        A candle ID encapsulates a market ID and candle interval. A list of available candle IDs, and therefore candle intervals can be found using the list-candle-intervals API.
         """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details("Method not implemented!")
@@ -1016,7 +1053,8 @@ class TradingDataServiceServicer(object):
     def ObserveCandleData(self, request, context):
         """Observe candle data
 
-        Subscribe to a stream of candle updates
+        Subscribe to a stream of candle updates given a candle ID.
+        A candle ID encapsulates a market ID and candle interval. A list of available candle IDs, and therefore candle intervals can be found using the list-candle-intervals API.
         """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details("Method not implemented!")
@@ -1025,7 +1063,7 @@ class TradingDataServiceServicer(object):
     def ListCandleIntervals(self, request, context):
         """List candle intervals
 
-        Get a list of all available intervals for a given market along with the corresponding candle ID
+        Get a list of all available candle intervals for a given market along with the corresponding candle ID.
         """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details("Method not implemented!")
@@ -1883,6 +1921,15 @@ class TradingDataServiceServicer(object):
         context.set_details("Method not implemented!")
         raise NotImplementedError("Method not implemented!")
 
+    def ListAMMs(self, request, context):
+        """List AMMs
+
+        Get a list of AMM or filter by market ID, party ID or AMM ID
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details("Method not implemented!")
+        raise NotImplementedError("Method not implemented!")
+
     def ExportNetworkHistory(self, request, context):
         """Export network history as CSV
 
@@ -2006,6 +2053,16 @@ def add_TradingDataServiceServicer_to_server(servicer, server):
             servicer.ListStopOrders,
             request_deserializer=data__node_dot_api_dot_v2_dot_trading__data__pb2.ListStopOrdersRequest.FromString,
             response_serializer=data__node_dot_api_dot_v2_dot_trading__data__pb2.ListStopOrdersResponse.SerializeToString,
+        ),
+        "ListGameTeamScores": grpc.unary_unary_rpc_method_handler(
+            servicer.ListGameTeamScores,
+            request_deserializer=data__node_dot_api_dot_v2_dot_trading__data__pb2.ListGameTeamScoresRequest.FromString,
+            response_serializer=data__node_dot_api_dot_v2_dot_trading__data__pb2.ListGameTeamScoresResponse.SerializeToString,
+        ),
+        "ListGamePartyScores": grpc.unary_unary_rpc_method_handler(
+            servicer.ListGamePartyScores,
+            request_deserializer=data__node_dot_api_dot_v2_dot_trading__data__pb2.ListGamePartyScoresRequest.FromString,
+            response_serializer=data__node_dot_api_dot_v2_dot_trading__data__pb2.ListGamePartyScoresResponse.SerializeToString,
         ),
         "ListPositions": grpc.unary_unary_rpc_method_handler(
             servicer.ListPositions,
@@ -2557,6 +2614,11 @@ def add_TradingDataServiceServicer_to_server(servicer, server):
             request_deserializer=data__node_dot_api_dot_v2_dot_trading__data__pb2.GetTimeWeightedNotionalPositionRequest.FromString,
             response_serializer=data__node_dot_api_dot_v2_dot_trading__data__pb2.GetTimeWeightedNotionalPositionResponse.SerializeToString,
         ),
+        "ListAMMs": grpc.unary_unary_rpc_method_handler(
+            servicer.ListAMMs,
+            request_deserializer=data__node_dot_api_dot_v2_dot_trading__data__pb2.ListAMMsRequest.FromString,
+            response_serializer=data__node_dot_api_dot_v2_dot_trading__data__pb2.ListAMMsResponse.SerializeToString,
+        ),
         "ExportNetworkHistory": grpc.unary_stream_rpc_method_handler(
             servicer.ExportNetworkHistory,
             request_deserializer=data__node_dot_api_dot_v2_dot_trading__data__pb2.ExportNetworkHistoryRequest.FromString,
@@ -2840,6 +2902,66 @@ class TradingDataService(object):
             "/datanode.api.v2.TradingDataService/ListStopOrders",
             data__node_dot_api_dot_v2_dot_trading__data__pb2.ListStopOrdersRequest.SerializeToString,
             data__node_dot_api_dot_v2_dot_trading__data__pb2.ListStopOrdersResponse.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True,
+        )
+
+    @staticmethod
+    def ListGameTeamScores(
+        request,
+        target,
+        options=(),
+        channel_credentials=None,
+        call_credentials=None,
+        insecure=False,
+        compression=None,
+        wait_for_ready=None,
+        timeout=None,
+        metadata=None,
+    ):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            "/datanode.api.v2.TradingDataService/ListGameTeamScores",
+            data__node_dot_api_dot_v2_dot_trading__data__pb2.ListGameTeamScoresRequest.SerializeToString,
+            data__node_dot_api_dot_v2_dot_trading__data__pb2.ListGameTeamScoresResponse.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True,
+        )
+
+    @staticmethod
+    def ListGamePartyScores(
+        request,
+        target,
+        options=(),
+        channel_credentials=None,
+        call_credentials=None,
+        insecure=False,
+        compression=None,
+        wait_for_ready=None,
+        timeout=None,
+        metadata=None,
+    ):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            "/datanode.api.v2.TradingDataService/ListGamePartyScores",
+            data__node_dot_api_dot_v2_dot_trading__data__pb2.ListGamePartyScoresRequest.SerializeToString,
+            data__node_dot_api_dot_v2_dot_trading__data__pb2.ListGamePartyScoresResponse.FromString,
             options,
             channel_credentials,
             insecure,
@@ -6140,6 +6262,36 @@ class TradingDataService(object):
             "/datanode.api.v2.TradingDataService/GetTimeWeightedNotionalPosition",
             data__node_dot_api_dot_v2_dot_trading__data__pb2.GetTimeWeightedNotionalPositionRequest.SerializeToString,
             data__node_dot_api_dot_v2_dot_trading__data__pb2.GetTimeWeightedNotionalPositionResponse.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True,
+        )
+
+    @staticmethod
+    def ListAMMs(
+        request,
+        target,
+        options=(),
+        channel_credentials=None,
+        call_credentials=None,
+        insecure=False,
+        compression=None,
+        wait_for_ready=None,
+        timeout=None,
+        metadata=None,
+    ):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            "/datanode.api.v2.TradingDataService/ListAMMs",
+            data__node_dot_api_dot_v2_dot_trading__data__pb2.ListAMMsRequest.SerializeToString,
+            data__node_dot_api_dot_v2_dot_trading__data__pb2.ListAMMsResponse.FromString,
             options,
             channel_credentials,
             insecure,
