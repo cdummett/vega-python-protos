@@ -737,7 +737,13 @@ class CancelAMM(_message.Message):
     ) -> None: ...
 
 class DelayedTransactionsWrapper(_message.Message):
-    __slots__ = ("transactions",)
+    __slots__ = ("transactions", "height")
     TRANSACTIONS_FIELD_NUMBER: _ClassVar[int]
+    HEIGHT_FIELD_NUMBER: _ClassVar[int]
     transactions: _containers.RepeatedScalarFieldContainer[bytes]
-    def __init__(self, transactions: _Optional[_Iterable[bytes]] = ...) -> None: ...
+    height: int
+    def __init__(
+        self,
+        transactions: _Optional[_Iterable[bytes]] = ...,
+        height: _Optional[int] = ...,
+    ) -> None: ...

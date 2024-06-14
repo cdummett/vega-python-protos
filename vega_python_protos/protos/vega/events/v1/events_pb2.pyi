@@ -954,13 +954,15 @@ class RecurringTransfer(_message.Message):
     ) -> None: ...
 
 class RecurringGovernanceTransfer(_message.Message):
-    __slots__ = ("start_epoch", "end_epoch", "dispatch_strategy")
+    __slots__ = ("start_epoch", "end_epoch", "dispatch_strategy", "factor")
     START_EPOCH_FIELD_NUMBER: _ClassVar[int]
     END_EPOCH_FIELD_NUMBER: _ClassVar[int]
     DISPATCH_STRATEGY_FIELD_NUMBER: _ClassVar[int]
+    FACTOR_FIELD_NUMBER: _ClassVar[int]
     start_epoch: int
     end_epoch: int
     dispatch_strategy: _vega_pb2.DispatchStrategy
+    factor: str
     def __init__(
         self,
         start_epoch: _Optional[int] = ...,
@@ -968,6 +970,7 @@ class RecurringGovernanceTransfer(_message.Message):
         dispatch_strategy: _Optional[
             _Union[_vega_pb2.DispatchStrategy, _Mapping]
         ] = ...,
+        factor: _Optional[str] = ...,
     ) -> None: ...
 
 class StakeLinking(_message.Message):

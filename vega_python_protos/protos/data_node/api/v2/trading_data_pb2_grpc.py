@@ -1043,7 +1043,8 @@ class TradingDataServiceServicer(object):
     def ListCandleData(self, request, context):
         """List candle data
 
-        Get a list of candle data for a given candle ID. Candle IDs can be obtained by calling list-candle-intervals
+        Get a list of candle data for a given candle ID.
+        A candle ID encapsulates a market ID and candle interval. A list of available candle IDs, and therefore candle intervals can be found using the list-candle-intervals API.
         """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details("Method not implemented!")
@@ -1052,7 +1053,8 @@ class TradingDataServiceServicer(object):
     def ObserveCandleData(self, request, context):
         """Observe candle data
 
-        Subscribe to a stream of candle updates
+        Subscribe to a stream of candle updates given a candle ID.
+        A candle ID encapsulates a market ID and candle interval. A list of available candle IDs, and therefore candle intervals can be found using the list-candle-intervals API.
         """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details("Method not implemented!")
@@ -1061,7 +1063,7 @@ class TradingDataServiceServicer(object):
     def ListCandleIntervals(self, request, context):
         """List candle intervals
 
-        Get a list of all available intervals for a given market along with the corresponding candle ID
+        Get a list of all available candle intervals for a given market along with the corresponding candle ID.
         """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details("Method not implemented!")

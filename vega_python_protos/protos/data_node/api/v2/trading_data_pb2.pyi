@@ -141,21 +141,34 @@ class GetPartyVestingStatsRequest(_message.Message):
     def __init__(self, party_id: _Optional[str] = ...) -> None: ...
 
 class GetPartyVestingStatsResponse(_message.Message):
-    __slots__ = ("party_id", "reward_bonus_multiplier", "epoch_seq", "quantum_balance")
+    __slots__ = (
+        "party_id",
+        "reward_bonus_multiplier",
+        "epoch_seq",
+        "quantum_balance",
+        "summed_reward_bonus_multiplier",
+        "summed_quantum_balance",
+    )
     PARTY_ID_FIELD_NUMBER: _ClassVar[int]
     REWARD_BONUS_MULTIPLIER_FIELD_NUMBER: _ClassVar[int]
     EPOCH_SEQ_FIELD_NUMBER: _ClassVar[int]
     QUANTUM_BALANCE_FIELD_NUMBER: _ClassVar[int]
+    SUMMED_REWARD_BONUS_MULTIPLIER_FIELD_NUMBER: _ClassVar[int]
+    SUMMED_QUANTUM_BALANCE_FIELD_NUMBER: _ClassVar[int]
     party_id: str
     reward_bonus_multiplier: str
     epoch_seq: int
     quantum_balance: str
+    summed_reward_bonus_multiplier: str
+    summed_quantum_balance: str
     def __init__(
         self,
         party_id: _Optional[str] = ...,
         reward_bonus_multiplier: _Optional[str] = ...,
         epoch_seq: _Optional[int] = ...,
         quantum_balance: _Optional[str] = ...,
+        summed_reward_bonus_multiplier: _Optional[str] = ...,
+        summed_quantum_balance: _Optional[str] = ...,
     ) -> None: ...
 
 class GetVestingBalancesSummaryRequest(_message.Message):
@@ -195,17 +208,19 @@ class GetVestingBalancesSummaryResponse(_message.Message):
     ) -> None: ...
 
 class AccountBalance(_message.Message):
-    __slots__ = ("owner", "balance", "asset", "market_id", "type")
+    __slots__ = ("owner", "balance", "asset", "market_id", "type", "parent_party_id")
     OWNER_FIELD_NUMBER: _ClassVar[int]
     BALANCE_FIELD_NUMBER: _ClassVar[int]
     ASSET_FIELD_NUMBER: _ClassVar[int]
     MARKET_ID_FIELD_NUMBER: _ClassVar[int]
     TYPE_FIELD_NUMBER: _ClassVar[int]
+    PARENT_PARTY_ID_FIELD_NUMBER: _ClassVar[int]
     owner: str
     balance: str
     asset: str
     market_id: str
     type: _vega_pb2.AccountType
+    parent_party_id: str
     def __init__(
         self,
         owner: _Optional[str] = ...,
@@ -213,18 +228,22 @@ class AccountBalance(_message.Message):
         asset: _Optional[str] = ...,
         market_id: _Optional[str] = ...,
         type: _Optional[_Union[_vega_pb2.AccountType, str]] = ...,
+        parent_party_id: _Optional[str] = ...,
     ) -> None: ...
 
 class ListAccountsRequest(_message.Message):
-    __slots__ = ("filter", "pagination")
+    __slots__ = ("filter", "pagination", "include_derived_parties")
     FILTER_FIELD_NUMBER: _ClassVar[int]
     PAGINATION_FIELD_NUMBER: _ClassVar[int]
+    INCLUDE_DERIVED_PARTIES_FIELD_NUMBER: _ClassVar[int]
     filter: AccountFilter
     pagination: Pagination
+    include_derived_parties: bool
     def __init__(
         self,
         filter: _Optional[_Union[AccountFilter, _Mapping]] = ...,
         pagination: _Optional[_Union[Pagination, _Mapping]] = ...,
+        include_derived_parties: bool = ...,
     ) -> None: ...
 
 class ListAccountsResponse(_message.Message):
@@ -260,21 +279,24 @@ class AccountEdge(_message.Message):
     ) -> None: ...
 
 class ObserveAccountsRequest(_message.Message):
-    __slots__ = ("market_id", "party_id", "asset", "type")
+    __slots__ = ("market_id", "party_id", "asset", "type", "include_derived_parties")
     MARKET_ID_FIELD_NUMBER: _ClassVar[int]
     PARTY_ID_FIELD_NUMBER: _ClassVar[int]
     ASSET_FIELD_NUMBER: _ClassVar[int]
     TYPE_FIELD_NUMBER: _ClassVar[int]
+    INCLUDE_DERIVED_PARTIES_FIELD_NUMBER: _ClassVar[int]
     market_id: str
     party_id: str
     asset: str
     type: _vega_pb2.AccountType
+    include_derived_parties: bool
     def __init__(
         self,
         market_id: _Optional[str] = ...,
         party_id: _Optional[str] = ...,
         asset: _Optional[str] = ...,
         type: _Optional[_Union[_vega_pb2.AccountType, str]] = ...,
+        include_derived_parties: bool = ...,
     ) -> None: ...
 
 class ObserveAccountsResponse(_message.Message):
@@ -502,15 +524,21 @@ class ListGameTeamScoresRequest(_message.Message):
     ) -> None: ...
 
 class GameTeamScoresFilter(_message.Message):
-    __slots__ = ("game_ids", "team_ids")
+    __slots__ = ("game_ids", "team_ids", "epoch_from", "epoch_to")
     GAME_IDS_FIELD_NUMBER: _ClassVar[int]
     TEAM_IDS_FIELD_NUMBER: _ClassVar[int]
+    EPOCH_FROM_FIELD_NUMBER: _ClassVar[int]
+    EPOCH_TO_FIELD_NUMBER: _ClassVar[int]
     game_ids: _containers.RepeatedScalarFieldContainer[str]
     team_ids: _containers.RepeatedScalarFieldContainer[str]
+    epoch_from: int
+    epoch_to: int
     def __init__(
         self,
         game_ids: _Optional[_Iterable[str]] = ...,
         team_ids: _Optional[_Iterable[str]] = ...,
+        epoch_from: _Optional[int] = ...,
+        epoch_to: _Optional[int] = ...,
     ) -> None: ...
 
 class ListGameTeamScoresResponse(_message.Message):
@@ -558,18 +586,24 @@ class ListGamePartyScoresRequest(_message.Message):
     ) -> None: ...
 
 class GamePartyScoresFilter(_message.Message):
-    __slots__ = ("game_ids", "team_ids", "party_ids")
+    __slots__ = ("game_ids", "team_ids", "party_ids", "epoch_from", "epoch_to")
     GAME_IDS_FIELD_NUMBER: _ClassVar[int]
     TEAM_IDS_FIELD_NUMBER: _ClassVar[int]
     PARTY_IDS_FIELD_NUMBER: _ClassVar[int]
+    EPOCH_FROM_FIELD_NUMBER: _ClassVar[int]
+    EPOCH_TO_FIELD_NUMBER: _ClassVar[int]
     game_ids: _containers.RepeatedScalarFieldContainer[str]
     team_ids: _containers.RepeatedScalarFieldContainer[str]
     party_ids: _containers.RepeatedScalarFieldContainer[str]
+    epoch_from: int
+    epoch_to: int
     def __init__(
         self,
         game_ids: _Optional[_Iterable[str]] = ...,
         team_ids: _Optional[_Iterable[str]] = ...,
         party_ids: _Optional[_Iterable[str]] = ...,
+        epoch_from: _Optional[int] = ...,
+        epoch_to: _Optional[int] = ...,
     ) -> None: ...
 
 class ListGamePartyScoresResponse(_message.Message):
@@ -2391,6 +2425,7 @@ class ListRewardsRequest(_message.Message):
         "to_epoch",
         "team_id",
         "game_id",
+        "include_derived_parties",
     )
     PARTY_ID_FIELD_NUMBER: _ClassVar[int]
     ASSET_ID_FIELD_NUMBER: _ClassVar[int]
@@ -2399,6 +2434,7 @@ class ListRewardsRequest(_message.Message):
     TO_EPOCH_FIELD_NUMBER: _ClassVar[int]
     TEAM_ID_FIELD_NUMBER: _ClassVar[int]
     GAME_ID_FIELD_NUMBER: _ClassVar[int]
+    INCLUDE_DERIVED_PARTIES_FIELD_NUMBER: _ClassVar[int]
     party_id: str
     asset_id: str
     pagination: Pagination
@@ -2406,6 +2442,7 @@ class ListRewardsRequest(_message.Message):
     to_epoch: int
     team_id: str
     game_id: str
+    include_derived_parties: bool
     def __init__(
         self,
         party_id: _Optional[str] = ...,
@@ -2415,6 +2452,7 @@ class ListRewardsRequest(_message.Message):
         to_epoch: _Optional[int] = ...,
         team_id: _Optional[str] = ...,
         game_id: _Optional[str] = ...,
+        include_derived_parties: bool = ...,
     ) -> None: ...
 
 class ListRewardsResponse(_message.Message):
@@ -2450,18 +2488,21 @@ class RewardsConnection(_message.Message):
     ) -> None: ...
 
 class ListRewardSummariesRequest(_message.Message):
-    __slots__ = ("party_id", "asset_id", "pagination")
+    __slots__ = ("party_id", "asset_id", "pagination", "include_derived_parties")
     PARTY_ID_FIELD_NUMBER: _ClassVar[int]
     ASSET_ID_FIELD_NUMBER: _ClassVar[int]
     PAGINATION_FIELD_NUMBER: _ClassVar[int]
+    INCLUDE_DERIVED_PARTIES_FIELD_NUMBER: _ClassVar[int]
     party_id: str
     asset_id: str
     pagination: Pagination
+    include_derived_parties: bool
     def __init__(
         self,
         party_id: _Optional[str] = ...,
         asset_id: _Optional[str] = ...,
         pagination: _Optional[_Union[Pagination, _Mapping]] = ...,
+        include_derived_parties: bool = ...,
     ) -> None: ...
 
 class ListRewardSummariesResponse(_message.Message):

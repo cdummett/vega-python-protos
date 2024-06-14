@@ -4124,8 +4124,20 @@ class MarketLiquidity(_message.Message):
         amm: _Optional[_Iterable[_Union[AMMValues, _Mapping]]] = ...,
     ) -> None: ...
 
+class DelayedTx(_message.Message):
+    __slots__ = ("tx", "height")
+    TX_FIELD_NUMBER: _ClassVar[int]
+    HEIGHT_FIELD_NUMBER: _ClassVar[int]
+    tx: _containers.RepeatedScalarFieldContainer[bytes]
+    height: int
+    def __init__(
+        self, tx: _Optional[_Iterable[bytes]] = ..., height: _Optional[int] = ...
+    ) -> None: ...
+
 class TxCache(_message.Message):
     __slots__ = ("txs",)
     TXS_FIELD_NUMBER: _ClassVar[int]
-    txs: _containers.RepeatedScalarFieldContainer[bytes]
-    def __init__(self, txs: _Optional[_Iterable[bytes]] = ...) -> None: ...
+    txs: _containers.RepeatedCompositeFieldContainer[DelayedTx]
+    def __init__(
+        self, txs: _Optional[_Iterable[_Union[DelayedTx, _Mapping]]] = ...
+    ) -> None: ...
