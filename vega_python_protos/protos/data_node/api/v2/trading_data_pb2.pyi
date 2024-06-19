@@ -5936,3 +5936,69 @@ class AMMEdge(_message.Message):
         node: _Optional[_Union[_events_pb2.AMM, _Mapping]] = ...,
         cursor: _Optional[str] = ...,
     ) -> None: ...
+
+class EstimateAMMBoundsRequest(_message.Message):
+    __slots__ = (
+        "base_price",
+        "upper_price",
+        "lower_price",
+        "leverage_at_upper_price",
+        "leverage_at_lower_price",
+        "commitment_amount",
+        "market_id",
+    )
+    BASE_PRICE_FIELD_NUMBER: _ClassVar[int]
+    UPPER_PRICE_FIELD_NUMBER: _ClassVar[int]
+    LOWER_PRICE_FIELD_NUMBER: _ClassVar[int]
+    LEVERAGE_AT_UPPER_PRICE_FIELD_NUMBER: _ClassVar[int]
+    LEVERAGE_AT_LOWER_PRICE_FIELD_NUMBER: _ClassVar[int]
+    COMMITMENT_AMOUNT_FIELD_NUMBER: _ClassVar[int]
+    MARKET_ID_FIELD_NUMBER: _ClassVar[int]
+    base_price: str
+    upper_price: str
+    lower_price: str
+    leverage_at_upper_price: str
+    leverage_at_lower_price: str
+    commitment_amount: str
+    market_id: str
+    def __init__(
+        self,
+        base_price: _Optional[str] = ...,
+        upper_price: _Optional[str] = ...,
+        lower_price: _Optional[str] = ...,
+        leverage_at_upper_price: _Optional[str] = ...,
+        leverage_at_lower_price: _Optional[str] = ...,
+        commitment_amount: _Optional[str] = ...,
+        market_id: _Optional[str] = ...,
+    ) -> None: ...
+
+class EstimateAMMBoundsResponse(_message.Message):
+    __slots__ = (
+        "position_size_at_upper",
+        "position_size_at_lower",
+        "loss_on_commitment_at_upper",
+        "loss_on_commitment_at_lower",
+        "liquidation_price_at_upper",
+        "liquidation_price_at_lower",
+    )
+    POSITION_SIZE_AT_UPPER_FIELD_NUMBER: _ClassVar[int]
+    POSITION_SIZE_AT_LOWER_FIELD_NUMBER: _ClassVar[int]
+    LOSS_ON_COMMITMENT_AT_UPPER_FIELD_NUMBER: _ClassVar[int]
+    LOSS_ON_COMMITMENT_AT_LOWER_FIELD_NUMBER: _ClassVar[int]
+    LIQUIDATION_PRICE_AT_UPPER_FIELD_NUMBER: _ClassVar[int]
+    LIQUIDATION_PRICE_AT_LOWER_FIELD_NUMBER: _ClassVar[int]
+    position_size_at_upper: str
+    position_size_at_lower: str
+    loss_on_commitment_at_upper: str
+    loss_on_commitment_at_lower: str
+    liquidation_price_at_upper: str
+    liquidation_price_at_lower: str
+    def __init__(
+        self,
+        position_size_at_upper: _Optional[str] = ...,
+        position_size_at_lower: _Optional[str] = ...,
+        loss_on_commitment_at_upper: _Optional[str] = ...,
+        loss_on_commitment_at_lower: _Optional[str] = ...,
+        liquidation_price_at_upper: _Optional[str] = ...,
+        liquidation_price_at_lower: _Optional[str] = ...,
+    ) -> None: ...

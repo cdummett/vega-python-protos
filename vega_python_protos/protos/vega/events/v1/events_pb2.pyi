@@ -262,6 +262,7 @@ class AMM(_message.Message):
         "parameters",
         "status",
         "status_reason",
+        "proposed_fee",
     )
 
     class Status(int, metaclass=_enum_type_wrapper.EnumTypeWrapper):
@@ -335,6 +336,7 @@ class AMM(_message.Message):
     PARAMETERS_FIELD_NUMBER: _ClassVar[int]
     STATUS_FIELD_NUMBER: _ClassVar[int]
     STATUS_REASON_FIELD_NUMBER: _ClassVar[int]
+    PROPOSED_FEE_FIELD_NUMBER: _ClassVar[int]
     id: str
     party_id: str
     market_id: str
@@ -343,6 +345,7 @@ class AMM(_message.Message):
     parameters: AMM.ConcentratedLiquidityParameters
     status: AMM.Status
     status_reason: AMM.StatusReason
+    proposed_fee: str
     def __init__(
         self,
         id: _Optional[str] = ...,
@@ -355,6 +358,7 @@ class AMM(_message.Message):
         ] = ...,
         status: _Optional[_Union[AMM.Status, str]] = ...,
         status_reason: _Optional[_Union[AMM.StatusReason, str]] = ...,
+        proposed_fee: _Optional[str] = ...,
     ) -> None: ...
 
 class VestingBalancesSummary(_message.Message):
