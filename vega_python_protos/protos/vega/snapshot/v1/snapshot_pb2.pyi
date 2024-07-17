@@ -199,6 +199,8 @@ class Payload(_message.Message):
         "banking_evm_bridge_states",
         "evm_multisig_topologies",
         "tx_cache",
+        "evm_fwd_heartbeats",
+        "volume_rebate_program",
     )
     ACTIVE_ASSETS_FIELD_NUMBER: _ClassVar[int]
     PENDING_ASSETS_FIELD_NUMBER: _ClassVar[int]
@@ -281,6 +283,8 @@ class Payload(_message.Message):
     BANKING_EVM_BRIDGE_STATES_FIELD_NUMBER: _ClassVar[int]
     EVM_MULTISIG_TOPOLOGIES_FIELD_NUMBER: _ClassVar[int]
     TX_CACHE_FIELD_NUMBER: _ClassVar[int]
+    EVM_FWD_HEARTBEATS_FIELD_NUMBER: _ClassVar[int]
+    VOLUME_REBATE_PROGRAM_FIELD_NUMBER: _ClassVar[int]
     active_assets: ActiveAssets
     pending_assets: PendingAssets
     banking_withdrawals: BankingWithdrawals
@@ -362,6 +366,8 @@ class Payload(_message.Message):
     banking_evm_bridge_states: BankingEVMBridgeStates
     evm_multisig_topologies: EVMMultisigTopologies
     tx_cache: TxCache
+    evm_fwd_heartbeats: EVMFwdHeartbeats
+    volume_rebate_program: VolumeRebateProgram
     def __init__(
         self,
         active_assets: _Optional[_Union[ActiveAssets, _Mapping]] = ...,
@@ -503,6 +509,8 @@ class Payload(_message.Message):
             _Union[EVMMultisigTopologies, _Mapping]
         ] = ...,
         tx_cache: _Optional[_Union[TxCache, _Mapping]] = ...,
+        evm_fwd_heartbeats: _Optional[_Union[EVMFwdHeartbeats, _Mapping]] = ...,
+        volume_rebate_program: _Optional[_Union[VolumeRebateProgram, _Mapping]] = ...,
     ) -> None: ...
 
 class OrderHoldingQuantities(_message.Message):
@@ -2171,6 +2179,7 @@ class AppState(_message.Message):
         "chain_id",
         "protocol_version",
         "protocol_upgrade",
+        "prev_block_time",
     )
     HEIGHT_FIELD_NUMBER: _ClassVar[int]
     BLOCK_FIELD_NUMBER: _ClassVar[int]
@@ -2178,12 +2187,14 @@ class AppState(_message.Message):
     CHAIN_ID_FIELD_NUMBER: _ClassVar[int]
     PROTOCOL_VERSION_FIELD_NUMBER: _ClassVar[int]
     PROTOCOL_UPGRADE_FIELD_NUMBER: _ClassVar[int]
+    PREV_BLOCK_TIME_FIELD_NUMBER: _ClassVar[int]
     height: int
     block: str
     time: int
     chain_id: str
     protocol_version: str
     protocol_upgrade: bool
+    prev_block_time: int
     def __init__(
         self,
         height: _Optional[int] = ...,
@@ -2192,6 +2203,7 @@ class AppState(_message.Message):
         chain_id: _Optional[str] = ...,
         protocol_version: _Optional[str] = ...,
         protocol_upgrade: bool = ...,
+        prev_block_time: _Optional[int] = ...,
     ) -> None: ...
 
 class EpochState(_message.Message):
@@ -3782,6 +3794,8 @@ class ReferralSet(_message.Message):
         "current_reward_factor",
         "current_rewards_multiplier",
         "current_rewards_factor_multiplier",
+        "current_rewards_factors_multiplier",
+        "current_reward_factors",
     )
     ID_FIELD_NUMBER: _ClassVar[int]
     CREATED_AT_FIELD_NUMBER: _ClassVar[int]
@@ -3792,6 +3806,8 @@ class ReferralSet(_message.Message):
     CURRENT_REWARD_FACTOR_FIELD_NUMBER: _ClassVar[int]
     CURRENT_REWARDS_MULTIPLIER_FIELD_NUMBER: _ClassVar[int]
     CURRENT_REWARDS_FACTOR_MULTIPLIER_FIELD_NUMBER: _ClassVar[int]
+    CURRENT_REWARDS_FACTORS_MULTIPLIER_FIELD_NUMBER: _ClassVar[int]
+    CURRENT_REWARD_FACTORS_FIELD_NUMBER: _ClassVar[int]
     id: str
     created_at: int
     updated_at: int
@@ -3801,6 +3817,8 @@ class ReferralSet(_message.Message):
     current_reward_factor: str
     current_rewards_multiplier: str
     current_rewards_factor_multiplier: str
+    current_rewards_factors_multiplier: _vega_pb2.RewardFactors
+    current_reward_factors: _vega_pb2.RewardFactors
     def __init__(
         self,
         id: _Optional[str] = ...,
@@ -3812,6 +3830,12 @@ class ReferralSet(_message.Message):
         current_reward_factor: _Optional[str] = ...,
         current_rewards_multiplier: _Optional[str] = ...,
         current_rewards_factor_multiplier: _Optional[str] = ...,
+        current_rewards_factors_multiplier: _Optional[
+            _Union[_vega_pb2.RewardFactors, _Mapping]
+        ] = ...,
+        current_reward_factors: _Optional[
+            _Union[_vega_pb2.RewardFactors, _Mapping]
+        ] = ...,
     ) -> None: ...
 
 class RunningVolume(_message.Message):
@@ -3825,18 +3849,21 @@ class RunningVolume(_message.Message):
     ) -> None: ...
 
 class FactorByReferee(_message.Message):
-    __slots__ = ("party", "discount_factor", "taker_volume")
+    __slots__ = ("party", "discount_factor", "taker_volume", "discount_factors")
     PARTY_FIELD_NUMBER: _ClassVar[int]
     DISCOUNT_FACTOR_FIELD_NUMBER: _ClassVar[int]
     TAKER_VOLUME_FIELD_NUMBER: _ClassVar[int]
+    DISCOUNT_FACTORS_FIELD_NUMBER: _ClassVar[int]
     party: str
     discount_factor: bytes
     taker_volume: bytes
+    discount_factors: _vega_pb2.DiscountFactors
     def __init__(
         self,
         party: _Optional[str] = ...,
         discount_factor: _Optional[bytes] = ...,
         taker_volume: _Optional[bytes] = ...,
+        discount_factors: _Optional[_Union[_vega_pb2.DiscountFactors, _Mapping]] = ...,
     ) -> None: ...
 
 class AssetLocked(_message.Message):
@@ -3911,6 +3938,72 @@ class PartyActivityStreak(_message.Message):
         reward_vesting_multiplier: _Optional[bytes] = ...,
     ) -> None: ...
 
+class PartyRebateData(_message.Message):
+    __slots__ = ("party", "fraction", "maker_fee_received")
+    PARTY_FIELD_NUMBER: _ClassVar[int]
+    FRACTION_FIELD_NUMBER: _ClassVar[int]
+    MAKER_FEE_RECEIVED_FIELD_NUMBER: _ClassVar[int]
+    party: str
+    fraction: str
+    maker_fee_received: str
+    def __init__(
+        self,
+        party: _Optional[str] = ...,
+        fraction: _Optional[str] = ...,
+        maker_fee_received: _Optional[str] = ...,
+    ) -> None: ...
+
+class VolumeRebateProgram(_message.Message):
+    __slots__ = (
+        "parties",
+        "party_rebate_data",
+        "current_program",
+        "new_program",
+        "factors_by_party",
+        "last_program_version",
+        "program_has_ended",
+    )
+    PARTIES_FIELD_NUMBER: _ClassVar[int]
+    PARTY_REBATE_DATA_FIELD_NUMBER: _ClassVar[int]
+    CURRENT_PROGRAM_FIELD_NUMBER: _ClassVar[int]
+    NEW_PROGRAM_FIELD_NUMBER: _ClassVar[int]
+    FACTORS_BY_PARTY_FIELD_NUMBER: _ClassVar[int]
+    LAST_PROGRAM_VERSION_FIELD_NUMBER: _ClassVar[int]
+    PROGRAM_HAS_ENDED_FIELD_NUMBER: _ClassVar[int]
+    parties: _containers.RepeatedScalarFieldContainer[str]
+    party_rebate_data: _containers.RepeatedCompositeFieldContainer[PartyRebateData]
+    current_program: _vega_pb2.VolumeRebateProgram
+    new_program: _vega_pb2.VolumeRebateProgram
+    factors_by_party: _containers.RepeatedCompositeFieldContainer[VolumeRebateStats]
+    last_program_version: int
+    program_has_ended: bool
+    def __init__(
+        self,
+        parties: _Optional[_Iterable[str]] = ...,
+        party_rebate_data: _Optional[
+            _Iterable[_Union[PartyRebateData, _Mapping]]
+        ] = ...,
+        current_program: _Optional[
+            _Union[_vega_pb2.VolumeRebateProgram, _Mapping]
+        ] = ...,
+        new_program: _Optional[_Union[_vega_pb2.VolumeRebateProgram, _Mapping]] = ...,
+        factors_by_party: _Optional[
+            _Iterable[_Union[VolumeRebateStats, _Mapping]]
+        ] = ...,
+        last_program_version: _Optional[int] = ...,
+        program_has_ended: bool = ...,
+    ) -> None: ...
+
+class VolumeRebateStats(_message.Message):
+    __slots__ = ("party", "rebate_factor")
+    PARTY_FIELD_NUMBER: _ClassVar[int]
+    REBATE_FACTOR_FIELD_NUMBER: _ClassVar[int]
+    party: str
+    rebate_factor: str
+    def __init__(
+        self, party: _Optional[str] = ..., rebate_factor: _Optional[str] = ...
+    ) -> None: ...
+
 class VolumeDiscountProgram(_message.Message):
     __slots__ = (
         "parties",
@@ -3961,13 +4054,18 @@ class VolumeDiscountProgram(_message.Message):
     ) -> None: ...
 
 class VolumeDiscountStats(_message.Message):
-    __slots__ = ("party", "discount_factor")
+    __slots__ = ("party", "discount_factor", "discount_factors")
     PARTY_FIELD_NUMBER: _ClassVar[int]
     DISCOUNT_FACTOR_FIELD_NUMBER: _ClassVar[int]
+    DISCOUNT_FACTORS_FIELD_NUMBER: _ClassVar[int]
     party: str
     discount_factor: str
+    discount_factors: _vega_pb2.DiscountFactors
     def __init__(
-        self, party: _Optional[str] = ..., discount_factor: _Optional[str] = ...
+        self,
+        party: _Optional[str] = ...,
+        discount_factor: _Optional[str] = ...,
+        discount_factors: _Optional[_Union[_vega_pb2.DiscountFactors, _Mapping]] = ...,
     ) -> None: ...
 
 class EpochPartyVolumes(_message.Message):
@@ -4140,4 +4238,53 @@ class TxCache(_message.Message):
     txs: _containers.RepeatedCompositeFieldContainer[DelayedTx]
     def __init__(
         self, txs: _Optional[_Iterable[_Union[DelayedTx, _Mapping]]] = ...
+    ) -> None: ...
+
+class EVMFwdPendingHeartbeat(_message.Message):
+    __slots__ = ("block_height", "block_time", "contract_address", "chain_id")
+    BLOCK_HEIGHT_FIELD_NUMBER: _ClassVar[int]
+    BLOCK_TIME_FIELD_NUMBER: _ClassVar[int]
+    CONTRACT_ADDRESS_FIELD_NUMBER: _ClassVar[int]
+    CHAIN_ID_FIELD_NUMBER: _ClassVar[int]
+    block_height: int
+    block_time: int
+    contract_address: str
+    chain_id: str
+    def __init__(
+        self,
+        block_height: _Optional[int] = ...,
+        block_time: _Optional[int] = ...,
+        contract_address: _Optional[str] = ...,
+        chain_id: _Optional[str] = ...,
+    ) -> None: ...
+
+class EVMFwdLastSeen(_message.Message):
+    __slots__ = ("chain_id", "contract_address", "block_height")
+    CHAIN_ID_FIELD_NUMBER: _ClassVar[int]
+    CONTRACT_ADDRESS_FIELD_NUMBER: _ClassVar[int]
+    BLOCK_HEIGHT_FIELD_NUMBER: _ClassVar[int]
+    chain_id: str
+    contract_address: str
+    block_height: int
+    def __init__(
+        self,
+        chain_id: _Optional[str] = ...,
+        contract_address: _Optional[str] = ...,
+        block_height: _Optional[int] = ...,
+    ) -> None: ...
+
+class EVMFwdHeartbeats(_message.Message):
+    __slots__ = ("pending_heartbeats", "last_seen")
+    PENDING_HEARTBEATS_FIELD_NUMBER: _ClassVar[int]
+    LAST_SEEN_FIELD_NUMBER: _ClassVar[int]
+    pending_heartbeats: _containers.RepeatedCompositeFieldContainer[
+        EVMFwdPendingHeartbeat
+    ]
+    last_seen: _containers.RepeatedCompositeFieldContainer[EVMFwdLastSeen]
+    def __init__(
+        self,
+        pending_heartbeats: _Optional[
+            _Iterable[_Union[EVMFwdPendingHeartbeat, _Mapping]]
+        ] = ...,
+        last_seen: _Optional[_Iterable[_Union[EVMFwdLastSeen, _Mapping]]] = ...,
     ) -> None: ...

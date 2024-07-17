@@ -683,6 +683,18 @@ class TradingDataServiceStub(object):
             response_deserializer=data__node_dot_api_dot_v2_dot_trading__data__pb2.GetFeesStatsForPartyResponse.FromString,
             _registered_method=True,
         )
+        self.GetCurrentVolumeRebateProgram = channel.unary_unary(
+            "/datanode.api.v2.TradingDataService/GetCurrentVolumeRebateProgram",
+            request_serializer=data__node_dot_api_dot_v2_dot_trading__data__pb2.GetCurrentVolumeRebateProgramRequest.SerializeToString,
+            response_deserializer=data__node_dot_api_dot_v2_dot_trading__data__pb2.GetCurrentVolumeRebateProgramResponse.FromString,
+            _registered_method=True,
+        )
+        self.GetVolumeRebateStats = channel.unary_unary(
+            "/datanode.api.v2.TradingDataService/GetVolumeRebateStats",
+            request_serializer=data__node_dot_api_dot_v2_dot_trading__data__pb2.GetVolumeRebateStatsRequest.SerializeToString,
+            response_deserializer=data__node_dot_api_dot_v2_dot_trading__data__pb2.GetVolumeRebateStatsResponse.FromString,
+            _registered_method=True,
+        )
         self.GetCurrentVolumeDiscountProgram = channel.unary_unary(
             "/datanode.api.v2.TradingDataService/GetCurrentVolumeDiscountProgram",
             request_serializer=data__node_dot_api_dot_v2_dot_trading__data__pb2.GetCurrentVolumeDiscountProgramRequest.SerializeToString,
@@ -747,6 +759,12 @@ class TradingDataServiceStub(object):
             "/datanode.api.v2.TradingDataService/ListAMMs",
             request_serializer=data__node_dot_api_dot_v2_dot_trading__data__pb2.ListAMMsRequest.SerializeToString,
             response_deserializer=data__node_dot_api_dot_v2_dot_trading__data__pb2.ListAMMsResponse.FromString,
+            _registered_method=True,
+        )
+        self.EstimateAMMBounds = channel.unary_unary(
+            "/datanode.api.v2.TradingDataService/EstimateAMMBounds",
+            request_serializer=data__node_dot_api_dot_v2_dot_trading__data__pb2.EstimateAMMBoundsRequest.SerializeToString,
+            response_deserializer=data__node_dot_api_dot_v2_dot_trading__data__pb2.EstimateAMMBoundsResponse.FromString,
             _registered_method=True,
         )
         self.ExportNetworkHistory = channel.unary_stream(
@@ -1827,6 +1845,25 @@ class TradingDataServiceServicer(object):
         context.set_details("Method not implemented!")
         raise NotImplementedError("Method not implemented!")
 
+    def GetCurrentVolumeRebateProgram(self, request, context):
+        """Get current volume rebate program
+
+        Get the current volume rebate program for the network. This program may not be active if it has ended
+        and has not been replaced by another.
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details("Method not implemented!")
+        raise NotImplementedError("Method not implemented!")
+
+    def GetVolumeRebateStats(self, request, context):
+        """Get volume rebate statistics
+
+        Get the information about a party's running traded volume, and the rebate factor it earns them.
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details("Method not implemented!")
+        raise NotImplementedError("Method not implemented!")
+
     def GetCurrentVolumeDiscountProgram(self, request, context):
         """Get current volume discount program
 
@@ -1925,6 +1962,15 @@ class TradingDataServiceServicer(object):
         """List AMMs
 
         Get a list of AMM or filter by market ID, party ID or AMM ID
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details("Method not implemented!")
+        raise NotImplementedError("Method not implemented!")
+
+    def EstimateAMMBounds(self, request, context):
+        """Estimate AMM bounds
+
+        Get a list of AMMs or filter by market ID, party ID or AMM ID
         """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details("Method not implemented!")
@@ -2564,6 +2610,16 @@ def add_TradingDataServiceServicer_to_server(servicer, server):
             request_deserializer=data__node_dot_api_dot_v2_dot_trading__data__pb2.GetFeesStatsForPartyRequest.FromString,
             response_serializer=data__node_dot_api_dot_v2_dot_trading__data__pb2.GetFeesStatsForPartyResponse.SerializeToString,
         ),
+        "GetCurrentVolumeRebateProgram": grpc.unary_unary_rpc_method_handler(
+            servicer.GetCurrentVolumeRebateProgram,
+            request_deserializer=data__node_dot_api_dot_v2_dot_trading__data__pb2.GetCurrentVolumeRebateProgramRequest.FromString,
+            response_serializer=data__node_dot_api_dot_v2_dot_trading__data__pb2.GetCurrentVolumeRebateProgramResponse.SerializeToString,
+        ),
+        "GetVolumeRebateStats": grpc.unary_unary_rpc_method_handler(
+            servicer.GetVolumeRebateStats,
+            request_deserializer=data__node_dot_api_dot_v2_dot_trading__data__pb2.GetVolumeRebateStatsRequest.FromString,
+            response_serializer=data__node_dot_api_dot_v2_dot_trading__data__pb2.GetVolumeRebateStatsResponse.SerializeToString,
+        ),
         "GetCurrentVolumeDiscountProgram": grpc.unary_unary_rpc_method_handler(
             servicer.GetCurrentVolumeDiscountProgram,
             request_deserializer=data__node_dot_api_dot_v2_dot_trading__data__pb2.GetCurrentVolumeDiscountProgramRequest.FromString,
@@ -2618,6 +2674,11 @@ def add_TradingDataServiceServicer_to_server(servicer, server):
             servicer.ListAMMs,
             request_deserializer=data__node_dot_api_dot_v2_dot_trading__data__pb2.ListAMMsRequest.FromString,
             response_serializer=data__node_dot_api_dot_v2_dot_trading__data__pb2.ListAMMsResponse.SerializeToString,
+        ),
+        "EstimateAMMBounds": grpc.unary_unary_rpc_method_handler(
+            servicer.EstimateAMMBounds,
+            request_deserializer=data__node_dot_api_dot_v2_dot_trading__data__pb2.EstimateAMMBoundsRequest.FromString,
+            response_serializer=data__node_dot_api_dot_v2_dot_trading__data__pb2.EstimateAMMBoundsResponse.SerializeToString,
         ),
         "ExportNetworkHistory": grpc.unary_stream_rpc_method_handler(
             servicer.ExportNetworkHistory,
@@ -5974,6 +6035,66 @@ class TradingDataService(object):
         )
 
     @staticmethod
+    def GetCurrentVolumeRebateProgram(
+        request,
+        target,
+        options=(),
+        channel_credentials=None,
+        call_credentials=None,
+        insecure=False,
+        compression=None,
+        wait_for_ready=None,
+        timeout=None,
+        metadata=None,
+    ):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            "/datanode.api.v2.TradingDataService/GetCurrentVolumeRebateProgram",
+            data__node_dot_api_dot_v2_dot_trading__data__pb2.GetCurrentVolumeRebateProgramRequest.SerializeToString,
+            data__node_dot_api_dot_v2_dot_trading__data__pb2.GetCurrentVolumeRebateProgramResponse.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True,
+        )
+
+    @staticmethod
+    def GetVolumeRebateStats(
+        request,
+        target,
+        options=(),
+        channel_credentials=None,
+        call_credentials=None,
+        insecure=False,
+        compression=None,
+        wait_for_ready=None,
+        timeout=None,
+        metadata=None,
+    ):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            "/datanode.api.v2.TradingDataService/GetVolumeRebateStats",
+            data__node_dot_api_dot_v2_dot_trading__data__pb2.GetVolumeRebateStatsRequest.SerializeToString,
+            data__node_dot_api_dot_v2_dot_trading__data__pb2.GetVolumeRebateStatsResponse.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True,
+        )
+
+    @staticmethod
     def GetCurrentVolumeDiscountProgram(
         request,
         target,
@@ -6292,6 +6413,36 @@ class TradingDataService(object):
             "/datanode.api.v2.TradingDataService/ListAMMs",
             data__node_dot_api_dot_v2_dot_trading__data__pb2.ListAMMsRequest.SerializeToString,
             data__node_dot_api_dot_v2_dot_trading__data__pb2.ListAMMsResponse.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True,
+        )
+
+    @staticmethod
+    def EstimateAMMBounds(
+        request,
+        target,
+        options=(),
+        channel_credentials=None,
+        call_credentials=None,
+        insecure=False,
+        compression=None,
+        wait_for_ready=None,
+        timeout=None,
+        metadata=None,
+    ):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            "/datanode.api.v2.TradingDataService/EstimateAMMBounds",
+            data__node_dot_api_dot_v2_dot_trading__data__pb2.EstimateAMMBoundsRequest.SerializeToString,
+            data__node_dot_api_dot_v2_dot_trading__data__pb2.EstimateAMMBoundsResponse.FromString,
             options,
             channel_credentials,
             insecure,

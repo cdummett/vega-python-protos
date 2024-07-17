@@ -125,6 +125,7 @@ class NodeVote(_message.Message):
         TYPE_SIGNER_THRESHOLD_SET: _ClassVar[NodeVote.Type]
         TYPE_GOVERNANCE_VALIDATE_ASSET: _ClassVar[NodeVote.Type]
         TYPE_ETHEREUM_CONTRACT_CALL_RESULT: _ClassVar[NodeVote.Type]
+        TYPE_ETHEREUM_HEARTBEAT: _ClassVar[NodeVote.Type]
 
     TYPE_UNSPECIFIED: NodeVote.Type
     TYPE_STAKE_DEPOSITED: NodeVote.Type
@@ -140,6 +141,7 @@ class NodeVote(_message.Message):
     TYPE_SIGNER_THRESHOLD_SET: NodeVote.Type
     TYPE_GOVERNANCE_VALIDATE_ASSET: NodeVote.Type
     TYPE_ETHEREUM_CONTRACT_CALL_RESULT: NodeVote.Type
+    TYPE_ETHEREUM_HEARTBEAT: NodeVote.Type
     REFERENCE_FIELD_NUMBER: _ClassVar[int]
     TYPE_FIELD_NUMBER: _ClassVar[int]
     reference: str
@@ -174,6 +176,7 @@ class ChainEvent(_message.Message):
         "staking_event",
         "erc20_multisig",
         "contract_call",
+        "heartbeat",
     )
     TX_ID_FIELD_NUMBER: _ClassVar[int]
     NONCE_FIELD_NUMBER: _ClassVar[int]
@@ -182,6 +185,7 @@ class ChainEvent(_message.Message):
     STAKING_EVENT_FIELD_NUMBER: _ClassVar[int]
     ERC20_MULTISIG_FIELD_NUMBER: _ClassVar[int]
     CONTRACT_CALL_FIELD_NUMBER: _ClassVar[int]
+    HEARTBEAT_FIELD_NUMBER: _ClassVar[int]
     tx_id: str
     nonce: int
     builtin: _chain_events_pb2.BuiltinAssetEvent
@@ -189,6 +193,7 @@ class ChainEvent(_message.Message):
     staking_event: _chain_events_pb2.StakingEvent
     erc20_multisig: _chain_events_pb2.ERC20MultiSigEvent
     contract_call: _chain_events_pb2.EthContractCallEvent
+    heartbeat: _chain_events_pb2.ERC20Heartbeat
     def __init__(
         self,
         tx_id: _Optional[str] = ...,
@@ -204,6 +209,7 @@ class ChainEvent(_message.Message):
         contract_call: _Optional[
             _Union[_chain_events_pb2.EthContractCallEvent, _Mapping]
         ] = ...,
+        heartbeat: _Optional[_Union[_chain_events_pb2.ERC20Heartbeat, _Mapping]] = ...,
     ) -> None: ...
 
 class KeyRotateSubmission(_message.Message):
