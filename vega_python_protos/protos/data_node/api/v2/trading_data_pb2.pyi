@@ -2426,6 +2426,7 @@ class ListRewardsRequest(_message.Message):
         "team_id",
         "game_id",
         "include_derived_parties",
+        "market_id",
     )
     PARTY_ID_FIELD_NUMBER: _ClassVar[int]
     ASSET_ID_FIELD_NUMBER: _ClassVar[int]
@@ -2435,6 +2436,7 @@ class ListRewardsRequest(_message.Message):
     TEAM_ID_FIELD_NUMBER: _ClassVar[int]
     GAME_ID_FIELD_NUMBER: _ClassVar[int]
     INCLUDE_DERIVED_PARTIES_FIELD_NUMBER: _ClassVar[int]
+    MARKET_ID_FIELD_NUMBER: _ClassVar[int]
     party_id: str
     asset_id: str
     pagination: Pagination
@@ -2443,6 +2445,7 @@ class ListRewardsRequest(_message.Message):
     team_id: str
     game_id: str
     include_derived_parties: bool
+    market_id: str
     def __init__(
         self,
         party_id: _Optional[str] = ...,
@@ -2453,6 +2456,7 @@ class ListRewardsRequest(_message.Message):
         team_id: _Optional[str] = ...,
         game_id: _Optional[str] = ...,
         include_derived_parties: bool = ...,
+        market_id: _Optional[str] = ...,
     ) -> None: ...
 
 class ListRewardsResponse(_message.Message):
@@ -2998,17 +3002,32 @@ class ListLiquidityProvidersResponse(_message.Message):
     ) -> None: ...
 
 class ListPaidLiquidityFeesRequest(_message.Message):
-    __slots__ = ("market_id", "asset_id", "epoch_seq", "party_ids", "pagination")
+    __slots__ = (
+        "market_id",
+        "asset_id",
+        "epoch_seq",
+        "party_ids",
+        "pagination",
+        "include_derived_parties",
+        "epoch_from",
+        "epoch_to",
+    )
     MARKET_ID_FIELD_NUMBER: _ClassVar[int]
     ASSET_ID_FIELD_NUMBER: _ClassVar[int]
     EPOCH_SEQ_FIELD_NUMBER: _ClassVar[int]
     PARTY_IDS_FIELD_NUMBER: _ClassVar[int]
     PAGINATION_FIELD_NUMBER: _ClassVar[int]
+    INCLUDE_DERIVED_PARTIES_FIELD_NUMBER: _ClassVar[int]
+    EPOCH_FROM_FIELD_NUMBER: _ClassVar[int]
+    EPOCH_TO_FIELD_NUMBER: _ClassVar[int]
     market_id: str
     asset_id: str
     epoch_seq: int
     party_ids: _containers.RepeatedScalarFieldContainer[str]
     pagination: Pagination
+    include_derived_parties: bool
+    epoch_from: int
+    epoch_to: int
     def __init__(
         self,
         market_id: _Optional[str] = ...,
@@ -3016,6 +3035,9 @@ class ListPaidLiquidityFeesRequest(_message.Message):
         epoch_seq: _Optional[int] = ...,
         party_ids: _Optional[_Iterable[str]] = ...,
         pagination: _Optional[_Union[Pagination, _Mapping]] = ...,
+        include_derived_parties: bool = ...,
+        epoch_from: _Optional[int] = ...,
+        epoch_to: _Optional[int] = ...,
     ) -> None: ...
 
 class ListPaidLiquidityFeesResponse(_message.Message):
@@ -4803,6 +4825,9 @@ class ReferralSetStats(_message.Message):
         "rewards_factor_multiplier",
         "was_eligible",
         "referrer_taker_volume",
+        "discount_factors",
+        "reward_factors",
+        "rewards_factors_multiplier",
     )
     AT_EPOCH_FIELD_NUMBER: _ClassVar[int]
     REFERRAL_SET_RUNNING_NOTIONAL_TAKER_VOLUME_FIELD_NUMBER: _ClassVar[int]
@@ -4814,6 +4839,9 @@ class ReferralSetStats(_message.Message):
     REWARDS_FACTOR_MULTIPLIER_FIELD_NUMBER: _ClassVar[int]
     WAS_ELIGIBLE_FIELD_NUMBER: _ClassVar[int]
     REFERRER_TAKER_VOLUME_FIELD_NUMBER: _ClassVar[int]
+    DISCOUNT_FACTORS_FIELD_NUMBER: _ClassVar[int]
+    REWARD_FACTORS_FIELD_NUMBER: _ClassVar[int]
+    REWARDS_FACTORS_MULTIPLIER_FIELD_NUMBER: _ClassVar[int]
     at_epoch: int
     referral_set_running_notional_taker_volume: str
     party_id: str
@@ -4824,6 +4852,9 @@ class ReferralSetStats(_message.Message):
     rewards_factor_multiplier: str
     was_eligible: bool
     referrer_taker_volume: str
+    discount_factors: _vega_pb2.DiscountFactors
+    reward_factors: _vega_pb2.RewardFactors
+    rewards_factors_multiplier: _vega_pb2.RewardFactors
     def __init__(
         self,
         at_epoch: _Optional[int] = ...,
@@ -4836,6 +4867,11 @@ class ReferralSetStats(_message.Message):
         rewards_factor_multiplier: _Optional[str] = ...,
         was_eligible: bool = ...,
         referrer_taker_volume: _Optional[str] = ...,
+        discount_factors: _Optional[_Union[_vega_pb2.DiscountFactors, _Mapping]] = ...,
+        reward_factors: _Optional[_Union[_vega_pb2.RewardFactors, _Mapping]] = ...,
+        rewards_factors_multiplier: _Optional[
+            _Union[_vega_pb2.RewardFactors, _Mapping]
+        ] = ...,
     ) -> None: ...
 
 class Team(_message.Message):
@@ -5253,21 +5289,34 @@ class ListTeamRefereeHistoryResponse(_message.Message):
     ) -> None: ...
 
 class GetFeesStatsRequest(_message.Message):
-    __slots__ = ("market_id", "asset_id", "epoch_seq", "party_id")
+    __slots__ = (
+        "market_id",
+        "asset_id",
+        "epoch_seq",
+        "party_id",
+        "epoch_from",
+        "epoch_to",
+    )
     MARKET_ID_FIELD_NUMBER: _ClassVar[int]
     ASSET_ID_FIELD_NUMBER: _ClassVar[int]
     EPOCH_SEQ_FIELD_NUMBER: _ClassVar[int]
     PARTY_ID_FIELD_NUMBER: _ClassVar[int]
+    EPOCH_FROM_FIELD_NUMBER: _ClassVar[int]
+    EPOCH_TO_FIELD_NUMBER: _ClassVar[int]
     market_id: str
     asset_id: str
     epoch_seq: int
     party_id: str
+    epoch_from: int
+    epoch_to: int
     def __init__(
         self,
         market_id: _Optional[str] = ...,
         asset_id: _Optional[str] = ...,
         epoch_seq: _Optional[int] = ...,
         party_id: _Optional[str] = ...,
+        epoch_from: _Optional[int] = ...,
+        epoch_to: _Optional[int] = ...,
     ) -> None: ...
 
 class GetFeesStatsResponse(_message.Message):
@@ -5370,21 +5419,30 @@ class VolumeDiscountStatsEdge(_message.Message):
     ) -> None: ...
 
 class VolumeDiscountStats(_message.Message):
-    __slots__ = ("at_epoch", "party_id", "discount_factor", "running_volume")
+    __slots__ = (
+        "at_epoch",
+        "party_id",
+        "discount_factor",
+        "running_volume",
+        "discount_factors",
+    )
     AT_EPOCH_FIELD_NUMBER: _ClassVar[int]
     PARTY_ID_FIELD_NUMBER: _ClassVar[int]
     DISCOUNT_FACTOR_FIELD_NUMBER: _ClassVar[int]
     RUNNING_VOLUME_FIELD_NUMBER: _ClassVar[int]
+    DISCOUNT_FACTORS_FIELD_NUMBER: _ClassVar[int]
     at_epoch: int
     party_id: str
     discount_factor: str
     running_volume: str
+    discount_factors: _vega_pb2.DiscountFactors
     def __init__(
         self,
         at_epoch: _Optional[int] = ...,
         party_id: _Optional[str] = ...,
         discount_factor: _Optional[str] = ...,
         running_volume: _Optional[str] = ...,
+        discount_factors: _Optional[_Union[_vega_pb2.DiscountFactors, _Mapping]] = ...,
     ) -> None: ...
 
 class VolumeDiscountProgram(_message.Message):
@@ -5935,4 +5993,194 @@ class AMMEdge(_message.Message):
         self,
         node: _Optional[_Union[_events_pb2.AMM, _Mapping]] = ...,
         cursor: _Optional[str] = ...,
+    ) -> None: ...
+
+class EstimateAMMBoundsRequest(_message.Message):
+    __slots__ = (
+        "base_price",
+        "upper_price",
+        "lower_price",
+        "leverage_at_upper_price",
+        "leverage_at_lower_price",
+        "commitment_amount",
+        "market_id",
+    )
+    BASE_PRICE_FIELD_NUMBER: _ClassVar[int]
+    UPPER_PRICE_FIELD_NUMBER: _ClassVar[int]
+    LOWER_PRICE_FIELD_NUMBER: _ClassVar[int]
+    LEVERAGE_AT_UPPER_PRICE_FIELD_NUMBER: _ClassVar[int]
+    LEVERAGE_AT_LOWER_PRICE_FIELD_NUMBER: _ClassVar[int]
+    COMMITMENT_AMOUNT_FIELD_NUMBER: _ClassVar[int]
+    MARKET_ID_FIELD_NUMBER: _ClassVar[int]
+    base_price: str
+    upper_price: str
+    lower_price: str
+    leverage_at_upper_price: str
+    leverage_at_lower_price: str
+    commitment_amount: str
+    market_id: str
+    def __init__(
+        self,
+        base_price: _Optional[str] = ...,
+        upper_price: _Optional[str] = ...,
+        lower_price: _Optional[str] = ...,
+        leverage_at_upper_price: _Optional[str] = ...,
+        leverage_at_lower_price: _Optional[str] = ...,
+        commitment_amount: _Optional[str] = ...,
+        market_id: _Optional[str] = ...,
+    ) -> None: ...
+
+class EstimateAMMBoundsResponse(_message.Message):
+    __slots__ = (
+        "position_size_at_upper",
+        "position_size_at_lower",
+        "loss_on_commitment_at_upper",
+        "loss_on_commitment_at_lower",
+        "liquidation_price_at_upper",
+        "liquidation_price_at_lower",
+    )
+    POSITION_SIZE_AT_UPPER_FIELD_NUMBER: _ClassVar[int]
+    POSITION_SIZE_AT_LOWER_FIELD_NUMBER: _ClassVar[int]
+    LOSS_ON_COMMITMENT_AT_UPPER_FIELD_NUMBER: _ClassVar[int]
+    LOSS_ON_COMMITMENT_AT_LOWER_FIELD_NUMBER: _ClassVar[int]
+    LIQUIDATION_PRICE_AT_UPPER_FIELD_NUMBER: _ClassVar[int]
+    LIQUIDATION_PRICE_AT_LOWER_FIELD_NUMBER: _ClassVar[int]
+    position_size_at_upper: str
+    position_size_at_lower: str
+    loss_on_commitment_at_upper: str
+    loss_on_commitment_at_lower: str
+    liquidation_price_at_upper: str
+    liquidation_price_at_lower: str
+    def __init__(
+        self,
+        position_size_at_upper: _Optional[str] = ...,
+        position_size_at_lower: _Optional[str] = ...,
+        loss_on_commitment_at_upper: _Optional[str] = ...,
+        loss_on_commitment_at_lower: _Optional[str] = ...,
+        liquidation_price_at_upper: _Optional[str] = ...,
+        liquidation_price_at_lower: _Optional[str] = ...,
+    ) -> None: ...
+
+class GetCurrentVolumeRebateProgramRequest(_message.Message):
+    __slots__ = ()
+    def __init__(self) -> None: ...
+
+class GetCurrentVolumeRebateProgramResponse(_message.Message):
+    __slots__ = ("current_volume_rebate_program",)
+    CURRENT_VOLUME_REBATE_PROGRAM_FIELD_NUMBER: _ClassVar[int]
+    current_volume_rebate_program: VolumeRebateProgram
+    def __init__(
+        self,
+        current_volume_rebate_program: _Optional[
+            _Union[VolumeRebateProgram, _Mapping]
+        ] = ...,
+    ) -> None: ...
+
+class GetVolumeRebateStatsRequest(_message.Message):
+    __slots__ = ("at_epoch", "party_id", "pagination")
+    AT_EPOCH_FIELD_NUMBER: _ClassVar[int]
+    PARTY_ID_FIELD_NUMBER: _ClassVar[int]
+    PAGINATION_FIELD_NUMBER: _ClassVar[int]
+    at_epoch: int
+    party_id: str
+    pagination: Pagination
+    def __init__(
+        self,
+        at_epoch: _Optional[int] = ...,
+        party_id: _Optional[str] = ...,
+        pagination: _Optional[_Union[Pagination, _Mapping]] = ...,
+    ) -> None: ...
+
+class GetVolumeRebateStatsResponse(_message.Message):
+    __slots__ = ("stats",)
+    STATS_FIELD_NUMBER: _ClassVar[int]
+    stats: VolumeRebateStatsConnection
+    def __init__(
+        self, stats: _Optional[_Union[VolumeRebateStatsConnection, _Mapping]] = ...
+    ) -> None: ...
+
+class VolumeRebateStatsConnection(_message.Message):
+    __slots__ = ("edges", "page_info")
+    EDGES_FIELD_NUMBER: _ClassVar[int]
+    PAGE_INFO_FIELD_NUMBER: _ClassVar[int]
+    edges: _containers.RepeatedCompositeFieldContainer[VolumeRebateStatsEdge]
+    page_info: PageInfo
+    def __init__(
+        self,
+        edges: _Optional[_Iterable[_Union[VolumeRebateStatsEdge, _Mapping]]] = ...,
+        page_info: _Optional[_Union[PageInfo, _Mapping]] = ...,
+    ) -> None: ...
+
+class VolumeRebateStatsEdge(_message.Message):
+    __slots__ = ("node", "cursor")
+    NODE_FIELD_NUMBER: _ClassVar[int]
+    CURSOR_FIELD_NUMBER: _ClassVar[int]
+    node: VolumeRebateStats
+    cursor: str
+    def __init__(
+        self,
+        node: _Optional[_Union[VolumeRebateStats, _Mapping]] = ...,
+        cursor: _Optional[str] = ...,
+    ) -> None: ...
+
+class VolumeRebateStats(_message.Message):
+    __slots__ = (
+        "at_epoch",
+        "party_id",
+        "additional_maker_rebate",
+        "maker_volume_fraction",
+        "maker_fees_received",
+    )
+    AT_EPOCH_FIELD_NUMBER: _ClassVar[int]
+    PARTY_ID_FIELD_NUMBER: _ClassVar[int]
+    ADDITIONAL_MAKER_REBATE_FIELD_NUMBER: _ClassVar[int]
+    MAKER_VOLUME_FRACTION_FIELD_NUMBER: _ClassVar[int]
+    MAKER_FEES_RECEIVED_FIELD_NUMBER: _ClassVar[int]
+    at_epoch: int
+    party_id: str
+    additional_maker_rebate: str
+    maker_volume_fraction: str
+    maker_fees_received: str
+    def __init__(
+        self,
+        at_epoch: _Optional[int] = ...,
+        party_id: _Optional[str] = ...,
+        additional_maker_rebate: _Optional[str] = ...,
+        maker_volume_fraction: _Optional[str] = ...,
+        maker_fees_received: _Optional[str] = ...,
+    ) -> None: ...
+
+class VolumeRebateProgram(_message.Message):
+    __slots__ = (
+        "version",
+        "id",
+        "benefit_tiers",
+        "end_of_program_timestamp",
+        "window_length",
+        "ended_at",
+    )
+    VERSION_FIELD_NUMBER: _ClassVar[int]
+    ID_FIELD_NUMBER: _ClassVar[int]
+    BENEFIT_TIERS_FIELD_NUMBER: _ClassVar[int]
+    END_OF_PROGRAM_TIMESTAMP_FIELD_NUMBER: _ClassVar[int]
+    WINDOW_LENGTH_FIELD_NUMBER: _ClassVar[int]
+    ENDED_AT_FIELD_NUMBER: _ClassVar[int]
+    version: int
+    id: str
+    benefit_tiers: _containers.RepeatedCompositeFieldContainer[
+        _vega_pb2.VolumeRebateBenefitTier
+    ]
+    end_of_program_timestamp: int
+    window_length: int
+    ended_at: int
+    def __init__(
+        self,
+        version: _Optional[int] = ...,
+        id: _Optional[str] = ...,
+        benefit_tiers: _Optional[
+            _Iterable[_Union[_vega_pb2.VolumeRebateBenefitTier, _Mapping]]
+        ] = ...,
+        end_of_program_timestamp: _Optional[int] = ...,
+        window_length: _Optional[int] = ...,
+        ended_at: _Optional[int] = ...,
     ) -> None: ...

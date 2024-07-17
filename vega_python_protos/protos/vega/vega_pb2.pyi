@@ -52,6 +52,7 @@ class AuctionTrigger(int, metaclass=_enum_type_wrapper.EnumTypeWrapper):
     AUCTION_TRIGGER_LIQUIDITY_TARGET_NOT_MET: _ClassVar[AuctionTrigger]
     AUCTION_TRIGGER_UNABLE_TO_DEPLOY_LP_ORDERS: _ClassVar[AuctionTrigger]
     AUCTION_TRIGGER_GOVERNANCE_SUSPENSION: _ClassVar[AuctionTrigger]
+    AUCTION_TRIGGER_LONG_BLOCK: _ClassVar[AuctionTrigger]
 
 class PeggedReference(int, metaclass=_enum_type_wrapper.EnumTypeWrapper):
     __slots__ = ()
@@ -157,6 +158,7 @@ class AccountType(int, metaclass=_enum_type_wrapper.EnumTypeWrapper):
     ACCOUNT_TYPE_PENDING_FEE_REFERRAL_REWARD: _ClassVar[AccountType]
     ACCOUNT_TYPE_ORDER_MARGIN: _ClassVar[AccountType]
     ACCOUNT_TYPE_REWARD_REALISED_RETURN: _ClassVar[AccountType]
+    ACCOUNT_TYPE_BUY_BACK_FEES: _ClassVar[AccountType]
 
 class TransferType(int, metaclass=_enum_type_wrapper.EnumTypeWrapper):
     __slots__ = ()
@@ -206,6 +208,10 @@ class TransferType(int, metaclass=_enum_type_wrapper.EnumTypeWrapper):
     TRANSFER_TYPE_AMM_LOW: _ClassVar[TransferType]
     TRANSFER_TYPE_AMM_HIGH: _ClassVar[TransferType]
     TRANSFER_TYPE_AMM_RELEASE: _ClassVar[TransferType]
+    TRANSFER_TYPE_TREASURY_FEE_PAY: _ClassVar[TransferType]
+    TRANSFER_TYPE_BUY_BACK_FEE_PAY: _ClassVar[TransferType]
+    TRANSFER_TYPE_HIGH_MAKER_FEE_REBATE_PAY: _ClassVar[TransferType]
+    TRANSFER_TYPE_HIGH_MAKER_FEE_REBATE_RECEIVE: _ClassVar[TransferType]
 
 class DispatchMetric(int, metaclass=_enum_type_wrapper.EnumTypeWrapper):
     __slots__ = ()
@@ -293,6 +299,7 @@ AUCTION_TRIGGER_LIQUIDITY: AuctionTrigger
 AUCTION_TRIGGER_LIQUIDITY_TARGET_NOT_MET: AuctionTrigger
 AUCTION_TRIGGER_UNABLE_TO_DEPLOY_LP_ORDERS: AuctionTrigger
 AUCTION_TRIGGER_GOVERNANCE_SUSPENSION: AuctionTrigger
+AUCTION_TRIGGER_LONG_BLOCK: AuctionTrigger
 PEGGED_REFERENCE_UNSPECIFIED: PeggedReference
 PEGGED_REFERENCE_MID: PeggedReference
 PEGGED_REFERENCE_BEST_BID: PeggedReference
@@ -384,6 +391,7 @@ ACCOUNT_TYPE_REWARD_VALIDATOR_RANKING: AccountType
 ACCOUNT_TYPE_PENDING_FEE_REFERRAL_REWARD: AccountType
 ACCOUNT_TYPE_ORDER_MARGIN: AccountType
 ACCOUNT_TYPE_REWARD_REALISED_RETURN: AccountType
+ACCOUNT_TYPE_BUY_BACK_FEES: AccountType
 TRANSFER_TYPE_UNSPECIFIED: TransferType
 TRANSFER_TYPE_LOSS: TransferType
 TRANSFER_TYPE_WIN: TransferType
@@ -430,6 +438,10 @@ TRANSFER_TYPE_ISOLATED_MARGIN_HIGH: TransferType
 TRANSFER_TYPE_AMM_LOW: TransferType
 TRANSFER_TYPE_AMM_HIGH: TransferType
 TRANSFER_TYPE_AMM_RELEASE: TransferType
+TRANSFER_TYPE_TREASURY_FEE_PAY: TransferType
+TRANSFER_TYPE_BUY_BACK_FEE_PAY: TransferType
+TRANSFER_TYPE_HIGH_MAKER_FEE_REBATE_PAY: TransferType
+TRANSFER_TYPE_HIGH_MAKER_FEE_REBATE_RECEIVE: TransferType
 DISPATCH_METRIC_UNSPECIFIED: DispatchMetric
 DISPATCH_METRIC_MAKER_FEES_PAID: DispatchMetric
 DISPATCH_METRIC_MAKER_FEES_RECEIVED: DispatchMetric
@@ -1015,6 +1027,9 @@ class Fee(_message.Message):
         "maker_fee_referrer_discount",
         "infrastructure_fee_referrer_discount",
         "liquidity_fee_referrer_discount",
+        "treasury_fee",
+        "buy_back_fee",
+        "high_volume_maker_fee",
     )
     MAKER_FEE_FIELD_NUMBER: _ClassVar[int]
     INFRASTRUCTURE_FEE_FIELD_NUMBER: _ClassVar[int]
@@ -1025,6 +1040,9 @@ class Fee(_message.Message):
     MAKER_FEE_REFERRER_DISCOUNT_FIELD_NUMBER: _ClassVar[int]
     INFRASTRUCTURE_FEE_REFERRER_DISCOUNT_FIELD_NUMBER: _ClassVar[int]
     LIQUIDITY_FEE_REFERRER_DISCOUNT_FIELD_NUMBER: _ClassVar[int]
+    TREASURY_FEE_FIELD_NUMBER: _ClassVar[int]
+    BUY_BACK_FEE_FIELD_NUMBER: _ClassVar[int]
+    HIGH_VOLUME_MAKER_FEE_FIELD_NUMBER: _ClassVar[int]
     maker_fee: str
     infrastructure_fee: str
     liquidity_fee: str
@@ -1034,6 +1052,9 @@ class Fee(_message.Message):
     maker_fee_referrer_discount: str
     infrastructure_fee_referrer_discount: str
     liquidity_fee_referrer_discount: str
+    treasury_fee: str
+    buy_back_fee: str
+    high_volume_maker_fee: str
     def __init__(
         self,
         maker_fee: _Optional[str] = ...,
@@ -1045,6 +1066,9 @@ class Fee(_message.Message):
         maker_fee_referrer_discount: _Optional[str] = ...,
         infrastructure_fee_referrer_discount: _Optional[str] = ...,
         liquidity_fee_referrer_discount: _Optional[str] = ...,
+        treasury_fee: _Optional[str] = ...,
+        buy_back_fee: _Optional[str] = ...,
+        high_volume_maker_fee: _Optional[str] = ...,
     ) -> None: ...
 
 class TradeSet(_message.Message):
@@ -1099,18 +1123,30 @@ class Candle(_message.Message):
     ) -> None: ...
 
 class PriceLevel(_message.Message):
-    __slots__ = ("price", "number_of_orders", "volume")
+    __slots__ = (
+        "price",
+        "number_of_orders",
+        "volume",
+        "amm_volume",
+        "amm_volume_estimated",
+    )
     PRICE_FIELD_NUMBER: _ClassVar[int]
     NUMBER_OF_ORDERS_FIELD_NUMBER: _ClassVar[int]
     VOLUME_FIELD_NUMBER: _ClassVar[int]
+    AMM_VOLUME_FIELD_NUMBER: _ClassVar[int]
+    AMM_VOLUME_ESTIMATED_FIELD_NUMBER: _ClassVar[int]
     price: str
     number_of_orders: int
     volume: int
+    amm_volume: int
+    amm_volume_estimated: int
     def __init__(
         self,
         price: _Optional[str] = ...,
         number_of_orders: _Optional[int] = ...,
         volume: _Optional[int] = ...,
+        amm_volume: _Optional[int] = ...,
+        amm_volume_estimated: _Optional[int] = ...,
     ) -> None: ...
 
 class MarketDepth(_message.Message):
@@ -2182,6 +2218,7 @@ class EthereumConfig(_message.Message):
         "staking_bridge_contract",
         "token_vesting_contract",
         "multisig_control_contract",
+        "block_time",
     )
     NETWORK_ID_FIELD_NUMBER: _ClassVar[int]
     CHAIN_ID_FIELD_NUMBER: _ClassVar[int]
@@ -2190,6 +2227,7 @@ class EthereumConfig(_message.Message):
     STAKING_BRIDGE_CONTRACT_FIELD_NUMBER: _ClassVar[int]
     TOKEN_VESTING_CONTRACT_FIELD_NUMBER: _ClassVar[int]
     MULTISIG_CONTROL_CONTRACT_FIELD_NUMBER: _ClassVar[int]
+    BLOCK_TIME_FIELD_NUMBER: _ClassVar[int]
     network_id: str
     chain_id: str
     collateral_bridge_contract: EthereumContractConfig
@@ -2197,6 +2235,7 @@ class EthereumConfig(_message.Message):
     staking_bridge_contract: EthereumContractConfig
     token_vesting_contract: EthereumContractConfig
     multisig_control_contract: EthereumContractConfig
+    block_time: str
     def __init__(
         self,
         network_id: _Optional[str] = ...,
@@ -2214,6 +2253,7 @@ class EthereumConfig(_message.Message):
         multisig_control_contract: _Optional[
             _Union[EthereumContractConfig, _Mapping]
         ] = ...,
+        block_time: _Optional[str] = ...,
     ) -> None: ...
 
 class EVMBridgeConfig(_message.Message):
@@ -2750,15 +2790,22 @@ class ReferralProgram(_message.Message):
     ) -> None: ...
 
 class VolumeBenefitTier(_message.Message):
-    __slots__ = ("minimum_running_notional_taker_volume", "volume_discount_factor")
+    __slots__ = (
+        "minimum_running_notional_taker_volume",
+        "volume_discount_factor",
+        "volume_discount_factors",
+    )
     MINIMUM_RUNNING_NOTIONAL_TAKER_VOLUME_FIELD_NUMBER: _ClassVar[int]
     VOLUME_DISCOUNT_FACTOR_FIELD_NUMBER: _ClassVar[int]
+    VOLUME_DISCOUNT_FACTORS_FIELD_NUMBER: _ClassVar[int]
     minimum_running_notional_taker_volume: str
     volume_discount_factor: str
+    volume_discount_factors: DiscountFactors
     def __init__(
         self,
         minimum_running_notional_taker_volume: _Optional[str] = ...,
         volume_discount_factor: _Optional[str] = ...,
+        volume_discount_factors: _Optional[_Union[DiscountFactors, _Mapping]] = ...,
     ) -> None: ...
 
 class BenefitTier(_message.Message):
@@ -2767,21 +2814,67 @@ class BenefitTier(_message.Message):
         "minimum_epochs",
         "referral_reward_factor",
         "referral_discount_factor",
+        "referral_reward_factors",
+        "referral_discount_factors",
     )
     MINIMUM_RUNNING_NOTIONAL_TAKER_VOLUME_FIELD_NUMBER: _ClassVar[int]
     MINIMUM_EPOCHS_FIELD_NUMBER: _ClassVar[int]
     REFERRAL_REWARD_FACTOR_FIELD_NUMBER: _ClassVar[int]
     REFERRAL_DISCOUNT_FACTOR_FIELD_NUMBER: _ClassVar[int]
+    REFERRAL_REWARD_FACTORS_FIELD_NUMBER: _ClassVar[int]
+    REFERRAL_DISCOUNT_FACTORS_FIELD_NUMBER: _ClassVar[int]
     minimum_running_notional_taker_volume: str
     minimum_epochs: str
     referral_reward_factor: str
     referral_discount_factor: str
+    referral_reward_factors: RewardFactors
+    referral_discount_factors: DiscountFactors
     def __init__(
         self,
         minimum_running_notional_taker_volume: _Optional[str] = ...,
         minimum_epochs: _Optional[str] = ...,
         referral_reward_factor: _Optional[str] = ...,
         referral_discount_factor: _Optional[str] = ...,
+        referral_reward_factors: _Optional[_Union[RewardFactors, _Mapping]] = ...,
+        referral_discount_factors: _Optional[_Union[DiscountFactors, _Mapping]] = ...,
+    ) -> None: ...
+
+class RewardFactors(_message.Message):
+    __slots__ = (
+        "infrastructure_reward_factor",
+        "liquidity_reward_factor",
+        "maker_reward_factor",
+    )
+    INFRASTRUCTURE_REWARD_FACTOR_FIELD_NUMBER: _ClassVar[int]
+    LIQUIDITY_REWARD_FACTOR_FIELD_NUMBER: _ClassVar[int]
+    MAKER_REWARD_FACTOR_FIELD_NUMBER: _ClassVar[int]
+    infrastructure_reward_factor: str
+    liquidity_reward_factor: str
+    maker_reward_factor: str
+    def __init__(
+        self,
+        infrastructure_reward_factor: _Optional[str] = ...,
+        liquidity_reward_factor: _Optional[str] = ...,
+        maker_reward_factor: _Optional[str] = ...,
+    ) -> None: ...
+
+class DiscountFactors(_message.Message):
+    __slots__ = (
+        "infrastructure_discount_factor",
+        "liquidity_discount_factor",
+        "maker_discount_factor",
+    )
+    INFRASTRUCTURE_DISCOUNT_FACTOR_FIELD_NUMBER: _ClassVar[int]
+    LIQUIDITY_DISCOUNT_FACTOR_FIELD_NUMBER: _ClassVar[int]
+    MAKER_DISCOUNT_FACTOR_FIELD_NUMBER: _ClassVar[int]
+    infrastructure_discount_factor: str
+    liquidity_discount_factor: str
+    maker_discount_factor: str
+    def __init__(
+        self,
+        infrastructure_discount_factor: _Optional[str] = ...,
+        liquidity_discount_factor: _Optional[str] = ...,
+        maker_discount_factor: _Optional[str] = ...,
     ) -> None: ...
 
 class VestingBenefitTiers(_message.Message):
@@ -2865,4 +2958,68 @@ class ActivityStreakBenefitTier(_message.Message):
         minimum_activity_streak: _Optional[int] = ...,
         reward_multiplier: _Optional[str] = ...,
         vesting_multiplier: _Optional[str] = ...,
+    ) -> None: ...
+
+class LongBlockAuction(_message.Message):
+    __slots__ = ("threshold", "duration")
+    THRESHOLD_FIELD_NUMBER: _ClassVar[int]
+    DURATION_FIELD_NUMBER: _ClassVar[int]
+    threshold: str
+    duration: str
+    def __init__(
+        self, threshold: _Optional[str] = ..., duration: _Optional[str] = ...
+    ) -> None: ...
+
+class LongBlockAuctionDurationTable(_message.Message):
+    __slots__ = ("threshold_and_duration",)
+    THRESHOLD_AND_DURATION_FIELD_NUMBER: _ClassVar[int]
+    threshold_and_duration: _containers.RepeatedCompositeFieldContainer[
+        LongBlockAuction
+    ]
+    def __init__(
+        self,
+        threshold_and_duration: _Optional[
+            _Iterable[_Union[LongBlockAuction, _Mapping]]
+        ] = ...,
+    ) -> None: ...
+
+class VolumeRebateBenefitTier(_message.Message):
+    __slots__ = ("minimum_party_maker_volume_fraction", "additional_maker_rebate")
+    MINIMUM_PARTY_MAKER_VOLUME_FRACTION_FIELD_NUMBER: _ClassVar[int]
+    ADDITIONAL_MAKER_REBATE_FIELD_NUMBER: _ClassVar[int]
+    minimum_party_maker_volume_fraction: str
+    additional_maker_rebate: str
+    def __init__(
+        self,
+        minimum_party_maker_volume_fraction: _Optional[str] = ...,
+        additional_maker_rebate: _Optional[str] = ...,
+    ) -> None: ...
+
+class VolumeRebateProgram(_message.Message):
+    __slots__ = (
+        "version",
+        "id",
+        "benefit_tiers",
+        "end_of_program_timestamp",
+        "window_length",
+    )
+    VERSION_FIELD_NUMBER: _ClassVar[int]
+    ID_FIELD_NUMBER: _ClassVar[int]
+    BENEFIT_TIERS_FIELD_NUMBER: _ClassVar[int]
+    END_OF_PROGRAM_TIMESTAMP_FIELD_NUMBER: _ClassVar[int]
+    WINDOW_LENGTH_FIELD_NUMBER: _ClassVar[int]
+    version: int
+    id: str
+    benefit_tiers: _containers.RepeatedCompositeFieldContainer[VolumeRebateBenefitTier]
+    end_of_program_timestamp: int
+    window_length: int
+    def __init__(
+        self,
+        version: _Optional[int] = ...,
+        id: _Optional[str] = ...,
+        benefit_tiers: _Optional[
+            _Iterable[_Union[VolumeRebateBenefitTier, _Mapping]]
+        ] = ...,
+        end_of_program_timestamp: _Optional[int] = ...,
+        window_length: _Optional[int] = ...,
     ) -> None: ...

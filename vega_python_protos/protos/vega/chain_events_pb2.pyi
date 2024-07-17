@@ -9,6 +9,24 @@ from typing import (
 
 DESCRIPTOR: _descriptor.FileDescriptor
 
+class ERC20Heartbeat(_message.Message):
+    __slots__ = ("contract_address", "block_height", "block_time", "source_chain_id")
+    CONTRACT_ADDRESS_FIELD_NUMBER: _ClassVar[int]
+    BLOCK_HEIGHT_FIELD_NUMBER: _ClassVar[int]
+    BLOCK_TIME_FIELD_NUMBER: _ClassVar[int]
+    SOURCE_CHAIN_ID_FIELD_NUMBER: _ClassVar[int]
+    contract_address: str
+    block_height: int
+    block_time: int
+    source_chain_id: str
+    def __init__(
+        self,
+        contract_address: _Optional[str] = ...,
+        block_height: _Optional[int] = ...,
+        block_time: _Optional[int] = ...,
+        source_chain_id: _Optional[str] = ...,
+    ) -> None: ...
+
 class EthContractCallEvent(_message.Message):
     __slots__ = (
         "spec_id",

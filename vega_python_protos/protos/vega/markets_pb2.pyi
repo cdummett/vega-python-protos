@@ -350,18 +350,30 @@ class TradableInstrument(_message.Message):
     ) -> None: ...
 
 class FeeFactors(_message.Message):
-    __slots__ = ("maker_fee", "infrastructure_fee", "liquidity_fee")
+    __slots__ = (
+        "maker_fee",
+        "infrastructure_fee",
+        "liquidity_fee",
+        "treasury_fee",
+        "buy_back_fee",
+    )
     MAKER_FEE_FIELD_NUMBER: _ClassVar[int]
     INFRASTRUCTURE_FEE_FIELD_NUMBER: _ClassVar[int]
     LIQUIDITY_FEE_FIELD_NUMBER: _ClassVar[int]
+    TREASURY_FEE_FIELD_NUMBER: _ClassVar[int]
+    BUY_BACK_FEE_FIELD_NUMBER: _ClassVar[int]
     maker_fee: str
     infrastructure_fee: str
     liquidity_fee: str
+    treasury_fee: str
+    buy_back_fee: str
     def __init__(
         self,
         maker_fee: _Optional[str] = ...,
         infrastructure_fee: _Optional[str] = ...,
         liquidity_fee: _Optional[str] = ...,
+        treasury_fee: _Optional[str] = ...,
+        buy_back_fee: _Optional[str] = ...,
     ) -> None: ...
 
 class Fees(_message.Message):
@@ -543,6 +555,7 @@ class Market(_message.Message):
         TRADING_MODE_MONITORING_AUCTION: _ClassVar[Market.TradingMode]
         TRADING_MODE_NO_TRADING: _ClassVar[Market.TradingMode]
         TRADING_MODE_SUSPENDED_VIA_GOVERNANCE: _ClassVar[Market.TradingMode]
+        TRADING_MODE_LONG_BLOCK_AUCTION: _ClassVar[Market.TradingMode]
 
     TRADING_MODE_UNSPECIFIED: Market.TradingMode
     TRADING_MODE_CONTINUOUS: Market.TradingMode
@@ -551,6 +564,7 @@ class Market(_message.Message):
     TRADING_MODE_MONITORING_AUCTION: Market.TradingMode
     TRADING_MODE_NO_TRADING: Market.TradingMode
     TRADING_MODE_SUSPENDED_VIA_GOVERNANCE: Market.TradingMode
+    TRADING_MODE_LONG_BLOCK_AUCTION: Market.TradingMode
     ID_FIELD_NUMBER: _ClassVar[int]
     TRADABLE_INSTRUMENT_FIELD_NUMBER: _ClassVar[int]
     DECIMAL_PLACES_FIELD_NUMBER: _ClassVar[int]
