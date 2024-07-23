@@ -350,30 +350,18 @@ class TradableInstrument(_message.Message):
     ) -> None: ...
 
 class FeeFactors(_message.Message):
-    __slots__ = (
-        "maker_fee",
-        "infrastructure_fee",
-        "liquidity_fee",
-        "treasury_fee",
-        "buy_back_fee",
-    )
+    __slots__ = ("maker_fee", "infrastructure_fee", "liquidity_fee")
     MAKER_FEE_FIELD_NUMBER: _ClassVar[int]
     INFRASTRUCTURE_FEE_FIELD_NUMBER: _ClassVar[int]
     LIQUIDITY_FEE_FIELD_NUMBER: _ClassVar[int]
-    TREASURY_FEE_FIELD_NUMBER: _ClassVar[int]
-    BUY_BACK_FEE_FIELD_NUMBER: _ClassVar[int]
     maker_fee: str
     infrastructure_fee: str
     liquidity_fee: str
-    treasury_fee: str
-    buy_back_fee: str
     def __init__(
         self,
         maker_fee: _Optional[str] = ...,
         infrastructure_fee: _Optional[str] = ...,
         liquidity_fee: _Optional[str] = ...,
-        treasury_fee: _Optional[str] = ...,
-        buy_back_fee: _Optional[str] = ...,
     ) -> None: ...
 
 class Fees(_message.Message):

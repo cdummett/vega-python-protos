@@ -73,7 +73,6 @@ class ProposalError(int, metaclass=_enum_type_wrapper.EnumTypeWrapper):
     PROPOSAL_ERROR_PROPOSAL_IN_BATCH_REJECTED: _ClassVar[ProposalError]
     PROPOSAL_ERROR_PROPOSAL_IN_BATCH_DECLINED: _ClassVar[ProposalError]
     PROPOSAL_ERROR_INVALID_SIZE_DECIMAL_PLACES: _ClassVar[ProposalError]
-    PROPOSAL_ERROR_INVALID_VOLUME_REBATE_PROGRAM: _ClassVar[ProposalError]
 
 class MarketStateUpdateType(int, metaclass=_enum_type_wrapper.EnumTypeWrapper):
     __slots__ = ()
@@ -143,7 +142,6 @@ PROPOSAL_ERROR_INVALID_VOLUME_DISCOUNT_PROGRAM: ProposalError
 PROPOSAL_ERROR_PROPOSAL_IN_BATCH_REJECTED: ProposalError
 PROPOSAL_ERROR_PROPOSAL_IN_BATCH_DECLINED: ProposalError
 PROPOSAL_ERROR_INVALID_SIZE_DECIMAL_PLACES: ProposalError
-PROPOSAL_ERROR_INVALID_VOLUME_REBATE_PROGRAM: ProposalError
 MARKET_STATE_UPDATE_TYPE_UNSPECIFIED: MarketStateUpdateType
 MARKET_STATE_UPDATE_TYPE_TERMINATE: MarketStateUpdateType
 MARKET_STATE_UPDATE_TYPE_SUSPEND: MarketStateUpdateType
@@ -799,7 +797,6 @@ class ProposalTerms(_message.Message):
         "update_market_state",
         "update_referral_program",
         "update_volume_discount_program",
-        "update_volume_rebate_program",
     )
     CLOSING_TIMESTAMP_FIELD_NUMBER: _ClassVar[int]
     ENACTMENT_TIMESTAMP_FIELD_NUMBER: _ClassVar[int]
@@ -817,7 +814,6 @@ class ProposalTerms(_message.Message):
     UPDATE_MARKET_STATE_FIELD_NUMBER: _ClassVar[int]
     UPDATE_REFERRAL_PROGRAM_FIELD_NUMBER: _ClassVar[int]
     UPDATE_VOLUME_DISCOUNT_PROGRAM_FIELD_NUMBER: _ClassVar[int]
-    UPDATE_VOLUME_REBATE_PROGRAM_FIELD_NUMBER: _ClassVar[int]
     closing_timestamp: int
     enactment_timestamp: int
     validation_timestamp: int
@@ -834,7 +830,6 @@ class ProposalTerms(_message.Message):
     update_market_state: UpdateMarketState
     update_referral_program: UpdateReferralProgram
     update_volume_discount_program: UpdateVolumeDiscountProgram
-    update_volume_rebate_program: UpdateVolumeRebateProgram
     def __init__(
         self,
         closing_timestamp: _Optional[int] = ...,
@@ -859,9 +854,6 @@ class ProposalTerms(_message.Message):
         update_volume_discount_program: _Optional[
             _Union[UpdateVolumeDiscountProgram, _Mapping]
         ] = ...,
-        update_volume_rebate_program: _Optional[
-            _Union[UpdateVolumeRebateProgram, _Mapping]
-        ] = ...,
     ) -> None: ...
 
 class BatchProposalTermsChange(_message.Message):
@@ -881,7 +873,6 @@ class BatchProposalTermsChange(_message.Message):
         "update_referral_program",
         "update_volume_discount_program",
         "new_asset",
-        "update_volume_rebate_program",
     )
     ENACTMENT_TIMESTAMP_FIELD_NUMBER: _ClassVar[int]
     VALIDATION_TIMESTAMP_FIELD_NUMBER: _ClassVar[int]
@@ -898,7 +889,6 @@ class BatchProposalTermsChange(_message.Message):
     UPDATE_REFERRAL_PROGRAM_FIELD_NUMBER: _ClassVar[int]
     UPDATE_VOLUME_DISCOUNT_PROGRAM_FIELD_NUMBER: _ClassVar[int]
     NEW_ASSET_FIELD_NUMBER: _ClassVar[int]
-    UPDATE_VOLUME_REBATE_PROGRAM_FIELD_NUMBER: _ClassVar[int]
     enactment_timestamp: int
     validation_timestamp: int
     update_market: UpdateMarket
@@ -914,7 +904,6 @@ class BatchProposalTermsChange(_message.Message):
     update_referral_program: UpdateReferralProgram
     update_volume_discount_program: UpdateVolumeDiscountProgram
     new_asset: NewAsset
-    update_volume_rebate_program: UpdateVolumeRebateProgram
     def __init__(
         self,
         enactment_timestamp: _Optional[int] = ...,
@@ -938,9 +927,6 @@ class BatchProposalTermsChange(_message.Message):
             _Union[UpdateVolumeDiscountProgram, _Mapping]
         ] = ...,
         new_asset: _Optional[_Union[NewAsset, _Mapping]] = ...,
-        update_volume_rebate_program: _Optional[
-            _Union[UpdateVolumeRebateProgram, _Mapping]
-        ] = ...,
     ) -> None: ...
 
 class ProposalParameters(_message.Message):
@@ -1255,33 +1241,6 @@ class VolumeDiscountProgramChanges(_message.Message):
         self,
         benefit_tiers: _Optional[
             _Iterable[_Union[_vega_pb2.VolumeBenefitTier, _Mapping]]
-        ] = ...,
-        end_of_program_timestamp: _Optional[int] = ...,
-        window_length: _Optional[int] = ...,
-    ) -> None: ...
-
-class UpdateVolumeRebateProgram(_message.Message):
-    __slots__ = ("changes",)
-    CHANGES_FIELD_NUMBER: _ClassVar[int]
-    changes: VolumeRebateProgramChanges
-    def __init__(
-        self, changes: _Optional[_Union[VolumeRebateProgramChanges, _Mapping]] = ...
-    ) -> None: ...
-
-class VolumeRebateProgramChanges(_message.Message):
-    __slots__ = ("benefit_tiers", "end_of_program_timestamp", "window_length")
-    BENEFIT_TIERS_FIELD_NUMBER: _ClassVar[int]
-    END_OF_PROGRAM_TIMESTAMP_FIELD_NUMBER: _ClassVar[int]
-    WINDOW_LENGTH_FIELD_NUMBER: _ClassVar[int]
-    benefit_tiers: _containers.RepeatedCompositeFieldContainer[
-        _vega_pb2.VolumeRebateBenefitTier
-    ]
-    end_of_program_timestamp: int
-    window_length: int
-    def __init__(
-        self,
-        benefit_tiers: _Optional[
-            _Iterable[_Union[_vega_pb2.VolumeRebateBenefitTier, _Mapping]]
         ] = ...,
         end_of_program_timestamp: _Optional[int] = ...,
         window_length: _Optional[int] = ...,
