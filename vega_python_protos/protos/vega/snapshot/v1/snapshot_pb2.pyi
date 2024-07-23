@@ -200,7 +200,6 @@ class Payload(_message.Message):
         "evm_multisig_topologies",
         "tx_cache",
         "evm_fwd_heartbeats",
-        "volume_rebate_program",
     )
     ACTIVE_ASSETS_FIELD_NUMBER: _ClassVar[int]
     PENDING_ASSETS_FIELD_NUMBER: _ClassVar[int]
@@ -284,7 +283,6 @@ class Payload(_message.Message):
     EVM_MULTISIG_TOPOLOGIES_FIELD_NUMBER: _ClassVar[int]
     TX_CACHE_FIELD_NUMBER: _ClassVar[int]
     EVM_FWD_HEARTBEATS_FIELD_NUMBER: _ClassVar[int]
-    VOLUME_REBATE_PROGRAM_FIELD_NUMBER: _ClassVar[int]
     active_assets: ActiveAssets
     pending_assets: PendingAssets
     banking_withdrawals: BankingWithdrawals
@@ -367,7 +365,6 @@ class Payload(_message.Message):
     evm_multisig_topologies: EVMMultisigTopologies
     tx_cache: TxCache
     evm_fwd_heartbeats: EVMFwdHeartbeats
-    volume_rebate_program: VolumeRebateProgram
     def __init__(
         self,
         active_assets: _Optional[_Union[ActiveAssets, _Mapping]] = ...,
@@ -510,7 +507,6 @@ class Payload(_message.Message):
         ] = ...,
         tx_cache: _Optional[_Union[TxCache, _Mapping]] = ...,
         evm_fwd_heartbeats: _Optional[_Union[EVMFwdHeartbeats, _Mapping]] = ...,
-        volume_rebate_program: _Optional[_Union[VolumeRebateProgram, _Mapping]] = ...,
     ) -> None: ...
 
 class OrderHoldingQuantities(_message.Message):
