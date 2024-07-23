@@ -4825,9 +4825,6 @@ class ReferralSetStats(_message.Message):
         "rewards_factor_multiplier",
         "was_eligible",
         "referrer_taker_volume",
-        "discount_factors",
-        "reward_factors",
-        "rewards_factors_multiplier",
     )
     AT_EPOCH_FIELD_NUMBER: _ClassVar[int]
     REFERRAL_SET_RUNNING_NOTIONAL_TAKER_VOLUME_FIELD_NUMBER: _ClassVar[int]
@@ -4839,9 +4836,6 @@ class ReferralSetStats(_message.Message):
     REWARDS_FACTOR_MULTIPLIER_FIELD_NUMBER: _ClassVar[int]
     WAS_ELIGIBLE_FIELD_NUMBER: _ClassVar[int]
     REFERRER_TAKER_VOLUME_FIELD_NUMBER: _ClassVar[int]
-    DISCOUNT_FACTORS_FIELD_NUMBER: _ClassVar[int]
-    REWARD_FACTORS_FIELD_NUMBER: _ClassVar[int]
-    REWARDS_FACTORS_MULTIPLIER_FIELD_NUMBER: _ClassVar[int]
     at_epoch: int
     referral_set_running_notional_taker_volume: str
     party_id: str
@@ -4852,9 +4846,6 @@ class ReferralSetStats(_message.Message):
     rewards_factor_multiplier: str
     was_eligible: bool
     referrer_taker_volume: str
-    discount_factors: _vega_pb2.DiscountFactors
-    reward_factors: _vega_pb2.RewardFactors
-    rewards_factors_multiplier: _vega_pb2.RewardFactors
     def __init__(
         self,
         at_epoch: _Optional[int] = ...,
@@ -4867,11 +4858,6 @@ class ReferralSetStats(_message.Message):
         rewards_factor_multiplier: _Optional[str] = ...,
         was_eligible: bool = ...,
         referrer_taker_volume: _Optional[str] = ...,
-        discount_factors: _Optional[_Union[_vega_pb2.DiscountFactors, _Mapping]] = ...,
-        reward_factors: _Optional[_Union[_vega_pb2.RewardFactors, _Mapping]] = ...,
-        rewards_factors_multiplier: _Optional[
-            _Union[_vega_pb2.RewardFactors, _Mapping]
-        ] = ...,
     ) -> None: ...
 
 class Team(_message.Message):
@@ -5419,30 +5405,21 @@ class VolumeDiscountStatsEdge(_message.Message):
     ) -> None: ...
 
 class VolumeDiscountStats(_message.Message):
-    __slots__ = (
-        "at_epoch",
-        "party_id",
-        "discount_factor",
-        "running_volume",
-        "discount_factors",
-    )
+    __slots__ = ("at_epoch", "party_id", "discount_factor", "running_volume")
     AT_EPOCH_FIELD_NUMBER: _ClassVar[int]
     PARTY_ID_FIELD_NUMBER: _ClassVar[int]
     DISCOUNT_FACTOR_FIELD_NUMBER: _ClassVar[int]
     RUNNING_VOLUME_FIELD_NUMBER: _ClassVar[int]
-    DISCOUNT_FACTORS_FIELD_NUMBER: _ClassVar[int]
     at_epoch: int
     party_id: str
     discount_factor: str
     running_volume: str
-    discount_factors: _vega_pb2.DiscountFactors
     def __init__(
         self,
         at_epoch: _Optional[int] = ...,
         party_id: _Optional[str] = ...,
         discount_factor: _Optional[str] = ...,
         running_volume: _Optional[str] = ...,
-        discount_factors: _Optional[_Union[_vega_pb2.DiscountFactors, _Mapping]] = ...,
     ) -> None: ...
 
 class VolumeDiscountProgram(_message.Message):

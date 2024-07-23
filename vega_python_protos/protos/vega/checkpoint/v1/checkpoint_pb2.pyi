@@ -621,8 +621,6 @@ class MarketActivityTracker(_message.Message):
         "realised_returns",
         "realised_returns_history",
         "amm_parties",
-        "buy_back_fees",
-        "treasury_fees",
     )
     MARKET_FIELD_NUMBER: _ClassVar[int]
     ASSET_FIELD_NUMBER: _ClassVar[int]
@@ -647,8 +645,6 @@ class MarketActivityTracker(_message.Message):
     REALISED_RETURNS_FIELD_NUMBER: _ClassVar[int]
     REALISED_RETURNS_HISTORY_FIELD_NUMBER: _ClassVar[int]
     AMM_PARTIES_FIELD_NUMBER: _ClassVar[int]
-    BUY_BACK_FEES_FIELD_NUMBER: _ClassVar[int]
-    TREASURY_FEES_FIELD_NUMBER: _ClassVar[int]
     market: str
     asset: str
     maker_fees_received: _containers.RepeatedCompositeFieldContainer[PartyFees]
@@ -680,8 +676,6 @@ class MarketActivityTracker(_message.Message):
         EpochReturnsData
     ]
     amm_parties: _containers.RepeatedScalarFieldContainer[str]
-    buy_back_fees: _containers.RepeatedCompositeFieldContainer[PartyFees]
-    treasury_fees: _containers.RepeatedCompositeFieldContainer[PartyFees]
     def __init__(
         self,
         market: _Optional[str] = ...,
@@ -723,8 +717,6 @@ class MarketActivityTracker(_message.Message):
             _Iterable[_Union[EpochReturnsData, _Mapping]]
         ] = ...,
         amm_parties: _Optional[_Iterable[str]] = ...,
-        buy_back_fees: _Optional[_Iterable[_Union[PartyFees, _Mapping]]] = ...,
-        treasury_fees: _Optional[_Iterable[_Union[PartyFees, _Mapping]]] = ...,
     ) -> None: ...
 
 class EpochPartyTakerFees(_message.Message):
