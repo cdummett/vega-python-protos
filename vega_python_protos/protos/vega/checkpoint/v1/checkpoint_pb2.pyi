@@ -567,11 +567,13 @@ class MarketTracker(_message.Message):
         "taker_notional_volume",
         "market_to_party_taker_notional_volume",
         "epoch_taker_fees",
+        "game_eligibility_tracker",
     )
     MARKET_ACTIVITY_FIELD_NUMBER: _ClassVar[int]
     TAKER_NOTIONAL_VOLUME_FIELD_NUMBER: _ClassVar[int]
     MARKET_TO_PARTY_TAKER_NOTIONAL_VOLUME_FIELD_NUMBER: _ClassVar[int]
     EPOCH_TAKER_FEES_FIELD_NUMBER: _ClassVar[int]
+    GAME_ELIGIBILITY_TRACKER_FIELD_NUMBER: _ClassVar[int]
     market_activity: _containers.RepeatedCompositeFieldContainer[MarketActivityTracker]
     taker_notional_volume: _containers.RepeatedCompositeFieldContainer[
         TakerNotionalVolume
@@ -580,6 +582,9 @@ class MarketTracker(_message.Message):
         MarketToPartyTakerNotionalVolume
     ]
     epoch_taker_fees: _containers.RepeatedCompositeFieldContainer[EpochPartyTakerFees]
+    game_eligibility_tracker: _containers.RepeatedCompositeFieldContainer[
+        GameEligibilityTracker
+    ]
     def __init__(
         self,
         market_activity: _Optional[
@@ -593,6 +598,9 @@ class MarketTracker(_message.Message):
         ] = ...,
         epoch_taker_fees: _Optional[
             _Iterable[_Union[EpochPartyTakerFees, _Mapping]]
+        ] = ...,
+        game_eligibility_tracker: _Optional[
+            _Iterable[_Union[GameEligibilityTracker, _Mapping]]
         ] = ...,
     ) -> None: ...
 
@@ -621,6 +629,8 @@ class MarketActivityTracker(_message.Message):
         "realised_returns",
         "realised_returns_history",
         "amm_parties",
+        "buy_back_fees",
+        "treasury_fees",
     )
     MARKET_FIELD_NUMBER: _ClassVar[int]
     ASSET_FIELD_NUMBER: _ClassVar[int]
@@ -645,6 +655,8 @@ class MarketActivityTracker(_message.Message):
     REALISED_RETURNS_FIELD_NUMBER: _ClassVar[int]
     REALISED_RETURNS_HISTORY_FIELD_NUMBER: _ClassVar[int]
     AMM_PARTIES_FIELD_NUMBER: _ClassVar[int]
+    BUY_BACK_FEES_FIELD_NUMBER: _ClassVar[int]
+    TREASURY_FEES_FIELD_NUMBER: _ClassVar[int]
     market: str
     asset: str
     maker_fees_received: _containers.RepeatedCompositeFieldContainer[PartyFees]
@@ -676,6 +688,8 @@ class MarketActivityTracker(_message.Message):
         EpochReturnsData
     ]
     amm_parties: _containers.RepeatedScalarFieldContainer[str]
+    buy_back_fees: _containers.RepeatedCompositeFieldContainer[PartyFees]
+    treasury_fees: _containers.RepeatedCompositeFieldContainer[PartyFees]
     def __init__(
         self,
         market: _Optional[str] = ...,
@@ -717,7 +731,29 @@ class MarketActivityTracker(_message.Message):
             _Iterable[_Union[EpochReturnsData, _Mapping]]
         ] = ...,
         amm_parties: _Optional[_Iterable[str]] = ...,
+        buy_back_fees: _Optional[_Iterable[_Union[PartyFees, _Mapping]]] = ...,
+        treasury_fees: _Optional[_Iterable[_Union[PartyFees, _Mapping]]] = ...,
     ) -> None: ...
+
+class GameEligibilityTracker(_message.Message):
+    __slots__ = ("game_id", "epoch_eligibility")
+    GAME_ID_FIELD_NUMBER: _ClassVar[int]
+    EPOCH_ELIGIBILITY_FIELD_NUMBER: _ClassVar[int]
+    game_id: str
+    epoch_eligibility: _containers.RepeatedCompositeFieldContainer[EpochEligibility]
+    def __init__(
+        self,
+        game_id: _Optional[str] = ...,
+        epoch_eligibility: _Optional[
+            _Iterable[_Union[EpochEligibility, _Mapping]]
+        ] = ...,
+    ) -> None: ...
+
+class EpochEligibility(_message.Message):
+    __slots__ = ("eligible_parties",)
+    ELIGIBLE_PARTIES_FIELD_NUMBER: _ClassVar[int]
+    eligible_parties: _containers.RepeatedScalarFieldContainer[str]
+    def __init__(self, eligible_parties: _Optional[_Iterable[str]] = ...) -> None: ...
 
 class EpochPartyTakerFees(_message.Message):
     __slots__ = ("epoch_party_taker_fees_paid",)

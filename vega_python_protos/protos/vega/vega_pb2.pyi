@@ -151,13 +151,15 @@ class AccountType(int, metaclass=_enum_type_wrapper.EnumTypeWrapper):
     ACCOUNT_TYPE_NETWORK_TREASURY: _ClassVar[AccountType]
     ACCOUNT_TYPE_VESTING_REWARDS: _ClassVar[AccountType]
     ACCOUNT_TYPE_VESTED_REWARDS: _ClassVar[AccountType]
-    ACCOUNT_TYPE_REWARD_AVERAGE_POSITION: _ClassVar[AccountType]
     ACCOUNT_TYPE_REWARD_RELATIVE_RETURN: _ClassVar[AccountType]
     ACCOUNT_TYPE_REWARD_RETURN_VOLATILITY: _ClassVar[AccountType]
     ACCOUNT_TYPE_REWARD_VALIDATOR_RANKING: _ClassVar[AccountType]
     ACCOUNT_TYPE_PENDING_FEE_REFERRAL_REWARD: _ClassVar[AccountType]
     ACCOUNT_TYPE_ORDER_MARGIN: _ClassVar[AccountType]
     ACCOUNT_TYPE_REWARD_REALISED_RETURN: _ClassVar[AccountType]
+    ACCOUNT_TYPE_BUY_BACK_FEES: _ClassVar[AccountType]
+    ACCOUNT_TYPE_REWARD_AVERAGE_NOTIONAL: _ClassVar[AccountType]
+    ACCOUNT_TYPE_REWARD_ELIGIBLE_ENTITIES: _ClassVar[AccountType]
 
 class TransferType(int, metaclass=_enum_type_wrapper.EnumTypeWrapper):
     __slots__ = ()
@@ -207,6 +209,10 @@ class TransferType(int, metaclass=_enum_type_wrapper.EnumTypeWrapper):
     TRANSFER_TYPE_AMM_LOW: _ClassVar[TransferType]
     TRANSFER_TYPE_AMM_HIGH: _ClassVar[TransferType]
     TRANSFER_TYPE_AMM_RELEASE: _ClassVar[TransferType]
+    TRANSFER_TYPE_TREASURY_FEE_PAY: _ClassVar[TransferType]
+    TRANSFER_TYPE_BUY_BACK_FEE_PAY: _ClassVar[TransferType]
+    TRANSFER_TYPE_HIGH_MAKER_FEE_REBATE_PAY: _ClassVar[TransferType]
+    TRANSFER_TYPE_HIGH_MAKER_FEE_REBATE_RECEIVE: _ClassVar[TransferType]
 
 class DispatchMetric(int, metaclass=_enum_type_wrapper.EnumTypeWrapper):
     __slots__ = ()
@@ -215,11 +221,12 @@ class DispatchMetric(int, metaclass=_enum_type_wrapper.EnumTypeWrapper):
     DISPATCH_METRIC_MAKER_FEES_RECEIVED: _ClassVar[DispatchMetric]
     DISPATCH_METRIC_LP_FEES_RECEIVED: _ClassVar[DispatchMetric]
     DISPATCH_METRIC_MARKET_VALUE: _ClassVar[DispatchMetric]
-    DISPATCH_METRIC_AVERAGE_POSITION: _ClassVar[DispatchMetric]
     DISPATCH_METRIC_RELATIVE_RETURN: _ClassVar[DispatchMetric]
     DISPATCH_METRIC_RETURN_VOLATILITY: _ClassVar[DispatchMetric]
     DISPATCH_METRIC_VALIDATOR_RANKING: _ClassVar[DispatchMetric]
     DISPATCH_METRIC_REALISED_RETURN: _ClassVar[DispatchMetric]
+    DISPATCH_METRIC_AVERAGE_NOTIONAL: _ClassVar[DispatchMetric]
+    DISPATCH_METRIC_ELIGIBLE_ENTITIES: _ClassVar[DispatchMetric]
 
 class EntityScope(int, metaclass=_enum_type_wrapper.EnumTypeWrapper):
     __slots__ = ()
@@ -240,6 +247,7 @@ class DistributionStrategy(int, metaclass=_enum_type_wrapper.EnumTypeWrapper):
     DISTRIBUTION_STRATEGY_UNSPECIFIED: _ClassVar[DistributionStrategy]
     DISTRIBUTION_STRATEGY_PRO_RATA: _ClassVar[DistributionStrategy]
     DISTRIBUTION_STRATEGY_RANK: _ClassVar[DistributionStrategy]
+    DISTRIBUTION_STRATEGY_RANK_LOTTERY: _ClassVar[DistributionStrategy]
 
 class NodeStatus(int, metaclass=_enum_type_wrapper.EnumTypeWrapper):
     __slots__ = ()
@@ -379,13 +387,15 @@ ACCOUNT_TYPE_LIQUIDITY_FEES_BONUS_DISTRIBUTION: AccountType
 ACCOUNT_TYPE_NETWORK_TREASURY: AccountType
 ACCOUNT_TYPE_VESTING_REWARDS: AccountType
 ACCOUNT_TYPE_VESTED_REWARDS: AccountType
-ACCOUNT_TYPE_REWARD_AVERAGE_POSITION: AccountType
 ACCOUNT_TYPE_REWARD_RELATIVE_RETURN: AccountType
 ACCOUNT_TYPE_REWARD_RETURN_VOLATILITY: AccountType
 ACCOUNT_TYPE_REWARD_VALIDATOR_RANKING: AccountType
 ACCOUNT_TYPE_PENDING_FEE_REFERRAL_REWARD: AccountType
 ACCOUNT_TYPE_ORDER_MARGIN: AccountType
 ACCOUNT_TYPE_REWARD_REALISED_RETURN: AccountType
+ACCOUNT_TYPE_BUY_BACK_FEES: AccountType
+ACCOUNT_TYPE_REWARD_AVERAGE_NOTIONAL: AccountType
+ACCOUNT_TYPE_REWARD_ELIGIBLE_ENTITIES: AccountType
 TRANSFER_TYPE_UNSPECIFIED: TransferType
 TRANSFER_TYPE_LOSS: TransferType
 TRANSFER_TYPE_WIN: TransferType
@@ -432,16 +442,21 @@ TRANSFER_TYPE_ISOLATED_MARGIN_HIGH: TransferType
 TRANSFER_TYPE_AMM_LOW: TransferType
 TRANSFER_TYPE_AMM_HIGH: TransferType
 TRANSFER_TYPE_AMM_RELEASE: TransferType
+TRANSFER_TYPE_TREASURY_FEE_PAY: TransferType
+TRANSFER_TYPE_BUY_BACK_FEE_PAY: TransferType
+TRANSFER_TYPE_HIGH_MAKER_FEE_REBATE_PAY: TransferType
+TRANSFER_TYPE_HIGH_MAKER_FEE_REBATE_RECEIVE: TransferType
 DISPATCH_METRIC_UNSPECIFIED: DispatchMetric
 DISPATCH_METRIC_MAKER_FEES_PAID: DispatchMetric
 DISPATCH_METRIC_MAKER_FEES_RECEIVED: DispatchMetric
 DISPATCH_METRIC_LP_FEES_RECEIVED: DispatchMetric
 DISPATCH_METRIC_MARKET_VALUE: DispatchMetric
-DISPATCH_METRIC_AVERAGE_POSITION: DispatchMetric
 DISPATCH_METRIC_RELATIVE_RETURN: DispatchMetric
 DISPATCH_METRIC_RETURN_VOLATILITY: DispatchMetric
 DISPATCH_METRIC_VALIDATOR_RANKING: DispatchMetric
 DISPATCH_METRIC_REALISED_RETURN: DispatchMetric
+DISPATCH_METRIC_AVERAGE_NOTIONAL: DispatchMetric
+DISPATCH_METRIC_ELIGIBLE_ENTITIES: DispatchMetric
 ENTITY_SCOPE_UNSPECIFIED: EntityScope
 ENTITY_SCOPE_INDIVIDUALS: EntityScope
 ENTITY_SCOPE_TEAMS: EntityScope
@@ -453,6 +468,7 @@ INDIVIDUAL_SCOPE_AMM: IndividualScope
 DISTRIBUTION_STRATEGY_UNSPECIFIED: DistributionStrategy
 DISTRIBUTION_STRATEGY_PRO_RATA: DistributionStrategy
 DISTRIBUTION_STRATEGY_RANK: DistributionStrategy
+DISTRIBUTION_STRATEGY_RANK_LOTTERY: DistributionStrategy
 NODE_STATUS_UNSPECIFIED: NodeStatus
 NODE_STATUS_VALIDATOR: NodeStatus
 NODE_STATUS_NON_VALIDATOR: NodeStatus
@@ -1017,6 +1033,9 @@ class Fee(_message.Message):
         "maker_fee_referrer_discount",
         "infrastructure_fee_referrer_discount",
         "liquidity_fee_referrer_discount",
+        "treasury_fee",
+        "buy_back_fee",
+        "high_volume_maker_fee",
     )
     MAKER_FEE_FIELD_NUMBER: _ClassVar[int]
     INFRASTRUCTURE_FEE_FIELD_NUMBER: _ClassVar[int]
@@ -1027,6 +1046,9 @@ class Fee(_message.Message):
     MAKER_FEE_REFERRER_DISCOUNT_FIELD_NUMBER: _ClassVar[int]
     INFRASTRUCTURE_FEE_REFERRER_DISCOUNT_FIELD_NUMBER: _ClassVar[int]
     LIQUIDITY_FEE_REFERRER_DISCOUNT_FIELD_NUMBER: _ClassVar[int]
+    TREASURY_FEE_FIELD_NUMBER: _ClassVar[int]
+    BUY_BACK_FEE_FIELD_NUMBER: _ClassVar[int]
+    HIGH_VOLUME_MAKER_FEE_FIELD_NUMBER: _ClassVar[int]
     maker_fee: str
     infrastructure_fee: str
     liquidity_fee: str
@@ -1036,6 +1058,9 @@ class Fee(_message.Message):
     maker_fee_referrer_discount: str
     infrastructure_fee_referrer_discount: str
     liquidity_fee_referrer_discount: str
+    treasury_fee: str
+    buy_back_fee: str
+    high_volume_maker_fee: str
     def __init__(
         self,
         maker_fee: _Optional[str] = ...,
@@ -1047,6 +1072,9 @@ class Fee(_message.Message):
         maker_fee_referrer_discount: _Optional[str] = ...,
         infrastructure_fee_referrer_discount: _Optional[str] = ...,
         liquidity_fee_referrer_discount: _Optional[str] = ...,
+        treasury_fee: _Optional[str] = ...,
+        buy_back_fee: _Optional[str] = ...,
+        high_volume_maker_fee: _Optional[str] = ...,
     ) -> None: ...
 
 class TradeSet(_message.Message):
@@ -2768,15 +2796,22 @@ class ReferralProgram(_message.Message):
     ) -> None: ...
 
 class VolumeBenefitTier(_message.Message):
-    __slots__ = ("minimum_running_notional_taker_volume", "volume_discount_factor")
+    __slots__ = (
+        "minimum_running_notional_taker_volume",
+        "volume_discount_factor",
+        "volume_discount_factors",
+    )
     MINIMUM_RUNNING_NOTIONAL_TAKER_VOLUME_FIELD_NUMBER: _ClassVar[int]
     VOLUME_DISCOUNT_FACTOR_FIELD_NUMBER: _ClassVar[int]
+    VOLUME_DISCOUNT_FACTORS_FIELD_NUMBER: _ClassVar[int]
     minimum_running_notional_taker_volume: str
     volume_discount_factor: str
+    volume_discount_factors: DiscountFactors
     def __init__(
         self,
         minimum_running_notional_taker_volume: _Optional[str] = ...,
         volume_discount_factor: _Optional[str] = ...,
+        volume_discount_factors: _Optional[_Union[DiscountFactors, _Mapping]] = ...,
     ) -> None: ...
 
 class BenefitTier(_message.Message):
@@ -2785,21 +2820,67 @@ class BenefitTier(_message.Message):
         "minimum_epochs",
         "referral_reward_factor",
         "referral_discount_factor",
+        "referral_reward_factors",
+        "referral_discount_factors",
     )
     MINIMUM_RUNNING_NOTIONAL_TAKER_VOLUME_FIELD_NUMBER: _ClassVar[int]
     MINIMUM_EPOCHS_FIELD_NUMBER: _ClassVar[int]
     REFERRAL_REWARD_FACTOR_FIELD_NUMBER: _ClassVar[int]
     REFERRAL_DISCOUNT_FACTOR_FIELD_NUMBER: _ClassVar[int]
+    REFERRAL_REWARD_FACTORS_FIELD_NUMBER: _ClassVar[int]
+    REFERRAL_DISCOUNT_FACTORS_FIELD_NUMBER: _ClassVar[int]
     minimum_running_notional_taker_volume: str
     minimum_epochs: str
     referral_reward_factor: str
     referral_discount_factor: str
+    referral_reward_factors: RewardFactors
+    referral_discount_factors: DiscountFactors
     def __init__(
         self,
         minimum_running_notional_taker_volume: _Optional[str] = ...,
         minimum_epochs: _Optional[str] = ...,
         referral_reward_factor: _Optional[str] = ...,
         referral_discount_factor: _Optional[str] = ...,
+        referral_reward_factors: _Optional[_Union[RewardFactors, _Mapping]] = ...,
+        referral_discount_factors: _Optional[_Union[DiscountFactors, _Mapping]] = ...,
+    ) -> None: ...
+
+class RewardFactors(_message.Message):
+    __slots__ = (
+        "infrastructure_reward_factor",
+        "liquidity_reward_factor",
+        "maker_reward_factor",
+    )
+    INFRASTRUCTURE_REWARD_FACTOR_FIELD_NUMBER: _ClassVar[int]
+    LIQUIDITY_REWARD_FACTOR_FIELD_NUMBER: _ClassVar[int]
+    MAKER_REWARD_FACTOR_FIELD_NUMBER: _ClassVar[int]
+    infrastructure_reward_factor: str
+    liquidity_reward_factor: str
+    maker_reward_factor: str
+    def __init__(
+        self,
+        infrastructure_reward_factor: _Optional[str] = ...,
+        liquidity_reward_factor: _Optional[str] = ...,
+        maker_reward_factor: _Optional[str] = ...,
+    ) -> None: ...
+
+class DiscountFactors(_message.Message):
+    __slots__ = (
+        "infrastructure_discount_factor",
+        "liquidity_discount_factor",
+        "maker_discount_factor",
+    )
+    INFRASTRUCTURE_DISCOUNT_FACTOR_FIELD_NUMBER: _ClassVar[int]
+    LIQUIDITY_DISCOUNT_FACTOR_FIELD_NUMBER: _ClassVar[int]
+    MAKER_DISCOUNT_FACTOR_FIELD_NUMBER: _ClassVar[int]
+    infrastructure_discount_factor: str
+    liquidity_discount_factor: str
+    maker_discount_factor: str
+    def __init__(
+        self,
+        infrastructure_discount_factor: _Optional[str] = ...,
+        liquidity_discount_factor: _Optional[str] = ...,
+        maker_discount_factor: _Optional[str] = ...,
     ) -> None: ...
 
 class VestingBenefitTiers(_message.Message):
@@ -2906,4 +2987,45 @@ class LongBlockAuctionDurationTable(_message.Message):
         threshold_and_duration: _Optional[
             _Iterable[_Union[LongBlockAuction, _Mapping]]
         ] = ...,
+    ) -> None: ...
+
+class VolumeRebateBenefitTier(_message.Message):
+    __slots__ = ("minimum_party_maker_volume_fraction", "additional_maker_rebate")
+    MINIMUM_PARTY_MAKER_VOLUME_FRACTION_FIELD_NUMBER: _ClassVar[int]
+    ADDITIONAL_MAKER_REBATE_FIELD_NUMBER: _ClassVar[int]
+    minimum_party_maker_volume_fraction: str
+    additional_maker_rebate: str
+    def __init__(
+        self,
+        minimum_party_maker_volume_fraction: _Optional[str] = ...,
+        additional_maker_rebate: _Optional[str] = ...,
+    ) -> None: ...
+
+class VolumeRebateProgram(_message.Message):
+    __slots__ = (
+        "version",
+        "id",
+        "benefit_tiers",
+        "end_of_program_timestamp",
+        "window_length",
+    )
+    VERSION_FIELD_NUMBER: _ClassVar[int]
+    ID_FIELD_NUMBER: _ClassVar[int]
+    BENEFIT_TIERS_FIELD_NUMBER: _ClassVar[int]
+    END_OF_PROGRAM_TIMESTAMP_FIELD_NUMBER: _ClassVar[int]
+    WINDOW_LENGTH_FIELD_NUMBER: _ClassVar[int]
+    version: int
+    id: str
+    benefit_tiers: _containers.RepeatedCompositeFieldContainer[VolumeRebateBenefitTier]
+    end_of_program_timestamp: int
+    window_length: int
+    def __init__(
+        self,
+        version: _Optional[int] = ...,
+        id: _Optional[str] = ...,
+        benefit_tiers: _Optional[
+            _Iterable[_Union[VolumeRebateBenefitTier, _Mapping]]
+        ] = ...,
+        end_of_program_timestamp: _Optional[int] = ...,
+        window_length: _Optional[int] = ...,
     ) -> None: ...
