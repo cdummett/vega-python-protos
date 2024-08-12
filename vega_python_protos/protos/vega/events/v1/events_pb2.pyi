@@ -123,6 +123,10 @@ class BusEventType(int, metaclass=_enum_type_wrapper.EnumTypeWrapper):
     BUS_EVENT_TYPE_CANCELLED_ORDERS: _ClassVar[BusEventType]
     BUS_EVENT_TYPE_GAME_SCORES: _ClassVar[BusEventType]
     BUS_EVENT_TYPE_AMM: _ClassVar[BusEventType]
+    BUS_EVENT_TYPE_VOLUME_REBATE_PROGRAM_STARTED: _ClassVar[BusEventType]
+    BUS_EVENT_TYPE_VOLUME_REBATE_PROGRAM_UPDATED: _ClassVar[BusEventType]
+    BUS_EVENT_TYPE_VOLUME_REBATE_PROGRAM_ENDED: _ClassVar[BusEventType]
+    BUS_EVENT_TYPE_VOLUME_REBATE_STATS_UPDATED: _ClassVar[BusEventType]
     BUS_EVENT_TYPE_MARKET: _ClassVar[BusEventType]
     BUS_EVENT_TYPE_TX_ERROR: _ClassVar[BusEventType]
 
@@ -222,6 +226,10 @@ BUS_EVENT_TYPE_TIME_WEIGHTED_NOTIONAL_POSITION_UPDATED: BusEventType
 BUS_EVENT_TYPE_CANCELLED_ORDERS: BusEventType
 BUS_EVENT_TYPE_GAME_SCORES: BusEventType
 BUS_EVENT_TYPE_AMM: BusEventType
+BUS_EVENT_TYPE_VOLUME_REBATE_PROGRAM_STARTED: BusEventType
+BUS_EVENT_TYPE_VOLUME_REBATE_PROGRAM_UPDATED: BusEventType
+BUS_EVENT_TYPE_VOLUME_REBATE_PROGRAM_ENDED: BusEventType
+BUS_EVENT_TYPE_VOLUME_REBATE_STATS_UPDATED: BusEventType
 BUS_EVENT_TYPE_MARKET: BusEventType
 BUS_EVENT_TYPE_TX_ERROR: BusEventType
 
@@ -458,18 +466,21 @@ class VolumeDiscountStatsUpdated(_message.Message):
     ) -> None: ...
 
 class PartyVolumeDiscountStats(_message.Message):
-    __slots__ = ("party_id", "discount_factor", "running_volume")
+    __slots__ = ("party_id", "discount_factor", "running_volume", "discount_factors")
     PARTY_ID_FIELD_NUMBER: _ClassVar[int]
     DISCOUNT_FACTOR_FIELD_NUMBER: _ClassVar[int]
     RUNNING_VOLUME_FIELD_NUMBER: _ClassVar[int]
+    DISCOUNT_FACTORS_FIELD_NUMBER: _ClassVar[int]
     party_id: str
     discount_factor: str
     running_volume: str
+    discount_factors: _vega_pb2.DiscountFactors
     def __init__(
         self,
         party_id: _Optional[str] = ...,
         discount_factor: _Optional[str] = ...,
         running_volume: _Optional[str] = ...,
+        discount_factors: _Optional[_Union[_vega_pb2.DiscountFactors, _Mapping]] = ...,
     ) -> None: ...
 
 class VestingStatsUpdated(_message.Message):
@@ -1342,6 +1353,7 @@ class TransactionResult(_message.Message):
         "party_id",
         "status",
         "hash",
+        "status_detail",
         "order_submission",
         "order_amendment",
         "order_cancellation",
@@ -1378,19 +1390,50 @@ class TransactionResult(_message.Message):
         "failure",
     )
 
+    class Status(int, metaclass=_enum_type_wrapper.EnumTypeWrapper):
+        __slots__ = ()
+        STATUS_UNSPECIFIED: _ClassVar[TransactionResult.Status]
+        STATUS_SUCCESS: _ClassVar[TransactionResult.Status]
+        STATUS_PARTIAL_SUCCESS: _ClassVar[TransactionResult.Status]
+        STATUS_FAILURE: _ClassVar[TransactionResult.Status]
+
+    STATUS_UNSPECIFIED: TransactionResult.Status
+    STATUS_SUCCESS: TransactionResult.Status
+    STATUS_PARTIAL_SUCCESS: TransactionResult.Status
+    STATUS_FAILURE: TransactionResult.Status
+
+    class KeyErrors(_message.Message):
+        __slots__ = ("key", "errors")
+        KEY_FIELD_NUMBER: _ClassVar[int]
+        ERRORS_FIELD_NUMBER: _ClassVar[int]
+        key: str
+        errors: _containers.RepeatedScalarFieldContainer[str]
+        def __init__(
+            self, key: _Optional[str] = ..., errors: _Optional[_Iterable[str]] = ...
+        ) -> None: ...
+
     class SuccessDetails(_message.Message):
         __slots__ = ()
         def __init__(self) -> None: ...
 
     class FailureDetails(_message.Message):
-        __slots__ = ("error",)
+        __slots__ = ("error", "errors")
         ERROR_FIELD_NUMBER: _ClassVar[int]
+        ERRORS_FIELD_NUMBER: _ClassVar[int]
         error: str
-        def __init__(self, error: _Optional[str] = ...) -> None: ...
+        errors: _containers.RepeatedCompositeFieldContainer[TransactionResult.KeyErrors]
+        def __init__(
+            self,
+            error: _Optional[str] = ...,
+            errors: _Optional[
+                _Iterable[_Union[TransactionResult.KeyErrors, _Mapping]]
+            ] = ...,
+        ) -> None: ...
 
     PARTY_ID_FIELD_NUMBER: _ClassVar[int]
     STATUS_FIELD_NUMBER: _ClassVar[int]
     HASH_FIELD_NUMBER: _ClassVar[int]
+    STATUS_DETAIL_FIELD_NUMBER: _ClassVar[int]
     ORDER_SUBMISSION_FIELD_NUMBER: _ClassVar[int]
     ORDER_AMENDMENT_FIELD_NUMBER: _ClassVar[int]
     ORDER_CANCELLATION_FIELD_NUMBER: _ClassVar[int]
@@ -1428,6 +1471,7 @@ class TransactionResult(_message.Message):
     party_id: str
     status: bool
     hash: str
+    status_detail: TransactionResult.Status
     order_submission: _commands_pb2.OrderSubmission
     order_amendment: _commands_pb2.OrderAmendment
     order_cancellation: _commands_pb2.OrderCancellation
@@ -1467,6 +1511,7 @@ class TransactionResult(_message.Message):
         party_id: _Optional[str] = ...,
         status: bool = ...,
         hash: _Optional[str] = ...,
+        status_detail: _Optional[_Union[TransactionResult.Status, str]] = ...,
         order_submission: _Optional[
             _Union[_commands_pb2.OrderSubmission, _Mapping]
         ] = ...,
@@ -2309,6 +2354,8 @@ class ReferralSetStatsUpdated(_message.Message):
         "rewards_factor_multiplier",
         "was_eligible",
         "referrer_taker_volume",
+        "reward_factors",
+        "reward_factors_multiplier",
     )
     SET_ID_FIELD_NUMBER: _ClassVar[int]
     AT_EPOCH_FIELD_NUMBER: _ClassVar[int]
@@ -2319,6 +2366,8 @@ class ReferralSetStatsUpdated(_message.Message):
     REWARDS_FACTOR_MULTIPLIER_FIELD_NUMBER: _ClassVar[int]
     WAS_ELIGIBLE_FIELD_NUMBER: _ClassVar[int]
     REFERRER_TAKER_VOLUME_FIELD_NUMBER: _ClassVar[int]
+    REWARD_FACTORS_FIELD_NUMBER: _ClassVar[int]
+    REWARD_FACTORS_MULTIPLIER_FIELD_NUMBER: _ClassVar[int]
     set_id: str
     at_epoch: int
     referral_set_running_notional_taker_volume: str
@@ -2328,6 +2377,8 @@ class ReferralSetStatsUpdated(_message.Message):
     rewards_factor_multiplier: str
     was_eligible: bool
     referrer_taker_volume: str
+    reward_factors: _vega_pb2.RewardFactors
+    reward_factors_multiplier: _vega_pb2.RewardFactors
     def __init__(
         self,
         set_id: _Optional[str] = ...,
@@ -2339,21 +2390,33 @@ class ReferralSetStatsUpdated(_message.Message):
         rewards_factor_multiplier: _Optional[str] = ...,
         was_eligible: bool = ...,
         referrer_taker_volume: _Optional[str] = ...,
+        reward_factors: _Optional[_Union[_vega_pb2.RewardFactors, _Mapping]] = ...,
+        reward_factors_multiplier: _Optional[
+            _Union[_vega_pb2.RewardFactors, _Mapping]
+        ] = ...,
     ) -> None: ...
 
 class RefereeStats(_message.Message):
-    __slots__ = ("party_id", "discount_factor", "epoch_notional_taker_volume")
+    __slots__ = (
+        "party_id",
+        "discount_factor",
+        "epoch_notional_taker_volume",
+        "discount_factors",
+    )
     PARTY_ID_FIELD_NUMBER: _ClassVar[int]
     DISCOUNT_FACTOR_FIELD_NUMBER: _ClassVar[int]
     EPOCH_NOTIONAL_TAKER_VOLUME_FIELD_NUMBER: _ClassVar[int]
+    DISCOUNT_FACTORS_FIELD_NUMBER: _ClassVar[int]
     party_id: str
     discount_factor: str
     epoch_notional_taker_volume: str
+    discount_factors: _vega_pb2.DiscountFactors
     def __init__(
         self,
         party_id: _Optional[str] = ...,
         discount_factor: _Optional[str] = ...,
         epoch_notional_taker_volume: _Optional[str] = ...,
+        discount_factors: _Optional[_Union[_vega_pb2.DiscountFactors, _Mapping]] = ...,
     ) -> None: ...
 
 class RefereeJoinedReferralSet(_message.Message):
@@ -2751,6 +2814,10 @@ class BusEvent(_message.Message):
         "cancelled_orders",
         "game_scores",
         "amm",
+        "volume_rebate_program_started",
+        "volume_rebate_program_updated",
+        "volume_rebate_program_ended",
+        "volume_rebate_stats_updated",
         "market",
         "tx_err_event",
         "version",
@@ -2848,6 +2915,10 @@ class BusEvent(_message.Message):
     CANCELLED_ORDERS_FIELD_NUMBER: _ClassVar[int]
     GAME_SCORES_FIELD_NUMBER: _ClassVar[int]
     AMM_FIELD_NUMBER: _ClassVar[int]
+    VOLUME_REBATE_PROGRAM_STARTED_FIELD_NUMBER: _ClassVar[int]
+    VOLUME_REBATE_PROGRAM_UPDATED_FIELD_NUMBER: _ClassVar[int]
+    VOLUME_REBATE_PROGRAM_ENDED_FIELD_NUMBER: _ClassVar[int]
+    VOLUME_REBATE_STATS_UPDATED_FIELD_NUMBER: _ClassVar[int]
     MARKET_FIELD_NUMBER: _ClassVar[int]
     TX_ERR_EVENT_FIELD_NUMBER: _ClassVar[int]
     VERSION_FIELD_NUMBER: _ClassVar[int]
@@ -2944,6 +3015,10 @@ class BusEvent(_message.Message):
     cancelled_orders: CancelledOrders
     game_scores: GameScores
     amm: AMM
+    volume_rebate_program_started: VolumeRebateProgramStarted
+    volume_rebate_program_updated: VolumeRebateProgramUpdated
+    volume_rebate_program_ended: VolumeRebateProgramEnded
+    volume_rebate_stats_updated: VolumeRebateStatsUpdated
     market: MarketEvent
     tx_err_event: TxErrorEvent
     version: int
@@ -3086,9 +3161,104 @@ class BusEvent(_message.Message):
         cancelled_orders: _Optional[_Union[CancelledOrders, _Mapping]] = ...,
         game_scores: _Optional[_Union[GameScores, _Mapping]] = ...,
         amm: _Optional[_Union[AMM, _Mapping]] = ...,
+        volume_rebate_program_started: _Optional[
+            _Union[VolumeRebateProgramStarted, _Mapping]
+        ] = ...,
+        volume_rebate_program_updated: _Optional[
+            _Union[VolumeRebateProgramUpdated, _Mapping]
+        ] = ...,
+        volume_rebate_program_ended: _Optional[
+            _Union[VolumeRebateProgramEnded, _Mapping]
+        ] = ...,
+        volume_rebate_stats_updated: _Optional[
+            _Union[VolumeRebateStatsUpdated, _Mapping]
+        ] = ...,
         market: _Optional[_Union[MarketEvent, _Mapping]] = ...,
         tx_err_event: _Optional[_Union[TxErrorEvent, _Mapping]] = ...,
         version: _Optional[int] = ...,
         chain_id: _Optional[str] = ...,
         tx_hash: _Optional[str] = ...,
+    ) -> None: ...
+
+class VolumeRebateStatsUpdated(_message.Message):
+    __slots__ = ("at_epoch", "stats")
+    AT_EPOCH_FIELD_NUMBER: _ClassVar[int]
+    STATS_FIELD_NUMBER: _ClassVar[int]
+    at_epoch: int
+    stats: _containers.RepeatedCompositeFieldContainer[PartyVolumeRebateStats]
+    def __init__(
+        self,
+        at_epoch: _Optional[int] = ...,
+        stats: _Optional[_Iterable[_Union[PartyVolumeRebateStats, _Mapping]]] = ...,
+    ) -> None: ...
+
+class PartyVolumeRebateStats(_message.Message):
+    __slots__ = (
+        "party_id",
+        "additional_rebate",
+        "maker_volume_fraction",
+        "maker_fees_received",
+    )
+    PARTY_ID_FIELD_NUMBER: _ClassVar[int]
+    ADDITIONAL_REBATE_FIELD_NUMBER: _ClassVar[int]
+    MAKER_VOLUME_FRACTION_FIELD_NUMBER: _ClassVar[int]
+    MAKER_FEES_RECEIVED_FIELD_NUMBER: _ClassVar[int]
+    party_id: str
+    additional_rebate: str
+    maker_volume_fraction: str
+    maker_fees_received: str
+    def __init__(
+        self,
+        party_id: _Optional[str] = ...,
+        additional_rebate: _Optional[str] = ...,
+        maker_volume_fraction: _Optional[str] = ...,
+        maker_fees_received: _Optional[str] = ...,
+    ) -> None: ...
+
+class VolumeRebateProgramStarted(_message.Message):
+    __slots__ = ("program", "started_at", "at_epoch")
+    PROGRAM_FIELD_NUMBER: _ClassVar[int]
+    STARTED_AT_FIELD_NUMBER: _ClassVar[int]
+    AT_EPOCH_FIELD_NUMBER: _ClassVar[int]
+    program: _vega_pb2.VolumeRebateProgram
+    started_at: int
+    at_epoch: int
+    def __init__(
+        self,
+        program: _Optional[_Union[_vega_pb2.VolumeRebateProgram, _Mapping]] = ...,
+        started_at: _Optional[int] = ...,
+        at_epoch: _Optional[int] = ...,
+    ) -> None: ...
+
+class VolumeRebateProgramUpdated(_message.Message):
+    __slots__ = ("program", "updated_at", "at_epoch")
+    PROGRAM_FIELD_NUMBER: _ClassVar[int]
+    UPDATED_AT_FIELD_NUMBER: _ClassVar[int]
+    AT_EPOCH_FIELD_NUMBER: _ClassVar[int]
+    program: _vega_pb2.VolumeRebateProgram
+    updated_at: int
+    at_epoch: int
+    def __init__(
+        self,
+        program: _Optional[_Union[_vega_pb2.VolumeRebateProgram, _Mapping]] = ...,
+        updated_at: _Optional[int] = ...,
+        at_epoch: _Optional[int] = ...,
+    ) -> None: ...
+
+class VolumeRebateProgramEnded(_message.Message):
+    __slots__ = ("version", "id", "ended_at", "at_epoch")
+    VERSION_FIELD_NUMBER: _ClassVar[int]
+    ID_FIELD_NUMBER: _ClassVar[int]
+    ENDED_AT_FIELD_NUMBER: _ClassVar[int]
+    AT_EPOCH_FIELD_NUMBER: _ClassVar[int]
+    version: int
+    id: str
+    ended_at: int
+    at_epoch: int
+    def __init__(
+        self,
+        version: _Optional[int] = ...,
+        id: _Optional[str] = ...,
+        ended_at: _Optional[int] = ...,
+        at_epoch: _Optional[int] = ...,
     ) -> None: ...
