@@ -907,21 +907,24 @@ class TWPositionData(_message.Message):
     ) -> None: ...
 
 class TWNotionalData(_message.Message):
-    __slots__ = ("party", "notional", "time", "tw_notional")
+    __slots__ = ("party", "notional", "time", "tw_notional", "price")
     PARTY_FIELD_NUMBER: _ClassVar[int]
     NOTIONAL_FIELD_NUMBER: _ClassVar[int]
     TIME_FIELD_NUMBER: _ClassVar[int]
     TW_NOTIONAL_FIELD_NUMBER: _ClassVar[int]
+    PRICE_FIELD_NUMBER: _ClassVar[int]
     party: str
     notional: bytes
     time: int
     tw_notional: bytes
+    price: bytes
     def __init__(
         self,
         party: _Optional[str] = ...,
         notional: _Optional[bytes] = ...,
         time: _Optional[int] = ...,
         tw_notional: _Optional[bytes] = ...,
+        price: _Optional[bytes] = ...,
     ) -> None: ...
 
 class PartyFees(_message.Message):

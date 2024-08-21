@@ -3444,18 +3444,21 @@ class GetEpochResponse(_message.Message):
     ) -> None: ...
 
 class EstimateFeeRequest(_message.Message):
-    __slots__ = ("market_id", "price", "size")
+    __slots__ = ("market_id", "price", "size", "party")
     MARKET_ID_FIELD_NUMBER: _ClassVar[int]
     PRICE_FIELD_NUMBER: _ClassVar[int]
     SIZE_FIELD_NUMBER: _ClassVar[int]
+    PARTY_FIELD_NUMBER: _ClassVar[int]
     market_id: str
     price: str
     size: int
+    party: str
     def __init__(
         self,
         market_id: _Optional[str] = ...,
         price: _Optional[str] = ...,
         size: _Optional[int] = ...,
+        party: _Optional[str] = ...,
     ) -> None: ...
 
 class EstimateFeeResponse(_message.Message):
