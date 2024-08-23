@@ -506,7 +506,7 @@ class IssueSignatures(_message.Message):
     ) -> None: ...
 
 class CreateReferralSet(_message.Message):
-    __slots__ = ("is_team", "team")
+    __slots__ = ("is_team", "team", "do_not_create_referral_set")
 
     class Team(_message.Message):
         __slots__ = ("name", "team_url", "avatar_url", "closed", "allow_list")
@@ -531,12 +531,15 @@ class CreateReferralSet(_message.Message):
 
     IS_TEAM_FIELD_NUMBER: _ClassVar[int]
     TEAM_FIELD_NUMBER: _ClassVar[int]
+    DO_NOT_CREATE_REFERRAL_SET_FIELD_NUMBER: _ClassVar[int]
     is_team: bool
     team: CreateReferralSet.Team
+    do_not_create_referral_set: bool
     def __init__(
         self,
         is_team: bool = ...,
         team: _Optional[_Union[CreateReferralSet.Team, _Mapping]] = ...,
+        do_not_create_referral_set: bool = ...,
     ) -> None: ...
 
 class UpdateReferralSet(_message.Message):
@@ -577,10 +580,14 @@ class UpdateReferralSet(_message.Message):
     ) -> None: ...
 
 class ApplyReferralCode(_message.Message):
-    __slots__ = ("id",)
+    __slots__ = ("id", "do_not_join_team")
     ID_FIELD_NUMBER: _ClassVar[int]
+    DO_NOT_JOIN_TEAM_FIELD_NUMBER: _ClassVar[int]
     id: str
-    def __init__(self, id: _Optional[str] = ...) -> None: ...
+    do_not_join_team: bool
+    def __init__(
+        self, id: _Optional[str] = ..., do_not_join_team: bool = ...
+    ) -> None: ...
 
 class JoinTeam(_message.Message):
     __slots__ = ("id",)

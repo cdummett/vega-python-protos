@@ -3444,18 +3444,21 @@ class GetEpochResponse(_message.Message):
     ) -> None: ...
 
 class EstimateFeeRequest(_message.Message):
-    __slots__ = ("market_id", "price", "size")
+    __slots__ = ("market_id", "price", "size", "party")
     MARKET_ID_FIELD_NUMBER: _ClassVar[int]
     PRICE_FIELD_NUMBER: _ClassVar[int]
     SIZE_FIELD_NUMBER: _ClassVar[int]
+    PARTY_FIELD_NUMBER: _ClassVar[int]
     market_id: str
     price: str
     size: int
+    party: str
     def __init__(
         self,
         market_id: _Optional[str] = ...,
         price: _Optional[str] = ...,
         size: _Optional[int] = ...,
+        party: _Optional[str] = ...,
     ) -> None: ...
 
 class EstimateFeeResponse(_message.Message):
@@ -6203,4 +6206,66 @@ class VolumeRebateProgram(_message.Message):
         end_of_program_timestamp: _Optional[int] = ...,
         window_length: _Optional[int] = ...,
         ended_at: _Optional[int] = ...,
+    ) -> None: ...
+
+class GetPartyDiscountStatsRequest(_message.Message):
+    __slots__ = ("party_id", "market_ids")
+    PARTY_ID_FIELD_NUMBER: _ClassVar[int]
+    MARKET_IDS_FIELD_NUMBER: _ClassVar[int]
+    party_id: str
+    market_ids: _containers.RepeatedScalarFieldContainer[str]
+    def __init__(
+        self,
+        party_id: _Optional[str] = ...,
+        market_ids: _Optional[_Iterable[str]] = ...,
+    ) -> None: ...
+
+class GetPartyDiscountStatsResponse(_message.Message):
+    __slots__ = (
+        "volume_discount_tier",
+        "volume_rebate_tier",
+        "referral_discount_tier",
+        "party_market_fees",
+    )
+    VOLUME_DISCOUNT_TIER_FIELD_NUMBER: _ClassVar[int]
+    VOLUME_REBATE_TIER_FIELD_NUMBER: _ClassVar[int]
+    REFERRAL_DISCOUNT_TIER_FIELD_NUMBER: _ClassVar[int]
+    PARTY_MARKET_FEES_FIELD_NUMBER: _ClassVar[int]
+    volume_discount_tier: int
+    volume_rebate_tier: int
+    referral_discount_tier: int
+    party_market_fees: _containers.RepeatedCompositeFieldContainer[MarketFees]
+    def __init__(
+        self,
+        volume_discount_tier: _Optional[int] = ...,
+        volume_rebate_tier: _Optional[int] = ...,
+        referral_discount_tier: _Optional[int] = ...,
+        party_market_fees: _Optional[_Iterable[_Union[MarketFees, _Mapping]]] = ...,
+    ) -> None: ...
+
+class MarketFees(_message.Message):
+    __slots__ = (
+        "market_id",
+        "undiscounted_taker_fee",
+        "discounted_taker_fee",
+        "base_maker_rebate",
+        "user_maker_rebate",
+    )
+    MARKET_ID_FIELD_NUMBER: _ClassVar[int]
+    UNDISCOUNTED_TAKER_FEE_FIELD_NUMBER: _ClassVar[int]
+    DISCOUNTED_TAKER_FEE_FIELD_NUMBER: _ClassVar[int]
+    BASE_MAKER_REBATE_FIELD_NUMBER: _ClassVar[int]
+    USER_MAKER_REBATE_FIELD_NUMBER: _ClassVar[int]
+    market_id: str
+    undiscounted_taker_fee: str
+    discounted_taker_fee: str
+    base_maker_rebate: str
+    user_maker_rebate: str
+    def __init__(
+        self,
+        market_id: _Optional[str] = ...,
+        undiscounted_taker_fee: _Optional[str] = ...,
+        discounted_taker_fee: _Optional[str] = ...,
+        base_maker_rebate: _Optional[str] = ...,
+        user_maker_rebate: _Optional[str] = ...,
     ) -> None: ...

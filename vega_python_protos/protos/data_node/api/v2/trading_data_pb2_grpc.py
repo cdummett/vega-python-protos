@@ -767,6 +767,12 @@ class TradingDataServiceStub(object):
             response_deserializer=data__node_dot_api_dot_v2_dot_trading__data__pb2.EstimateAMMBoundsResponse.FromString,
             _registered_method=True,
         )
+        self.GetPartyDiscountStats = channel.unary_unary(
+            "/datanode.api.v2.TradingDataService/GetPartyDiscountStats",
+            request_serializer=data__node_dot_api_dot_v2_dot_trading__data__pb2.GetPartyDiscountStatsRequest.SerializeToString,
+            response_deserializer=data__node_dot_api_dot_v2_dot_trading__data__pb2.GetPartyDiscountStatsResponse.FromString,
+            _registered_method=True,
+        )
         self.ExportNetworkHistory = channel.unary_stream(
             "/datanode.api.v2.TradingDataService/ExportNetworkHistory",
             request_serializer=data__node_dot_api_dot_v2_dot_trading__data__pb2.ExportNetworkHistoryRequest.SerializeToString,
@@ -1976,6 +1982,15 @@ class TradingDataServiceServicer(object):
         context.set_details("Method not implemented!")
         raise NotImplementedError("Method not implemented!")
 
+    def GetPartyDiscountStats(self, request, context):
+        """Get the fees and discounts a party is entitled to.
+
+        Get the discount and reward tiers, and the fees and rebates for a party per market.
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details("Method not implemented!")
+        raise NotImplementedError("Method not implemented!")
+
     def ExportNetworkHistory(self, request, context):
         """Export network history as CSV
 
@@ -2679,6 +2694,11 @@ def add_TradingDataServiceServicer_to_server(servicer, server):
             servicer.EstimateAMMBounds,
             request_deserializer=data__node_dot_api_dot_v2_dot_trading__data__pb2.EstimateAMMBoundsRequest.FromString,
             response_serializer=data__node_dot_api_dot_v2_dot_trading__data__pb2.EstimateAMMBoundsResponse.SerializeToString,
+        ),
+        "GetPartyDiscountStats": grpc.unary_unary_rpc_method_handler(
+            servicer.GetPartyDiscountStats,
+            request_deserializer=data__node_dot_api_dot_v2_dot_trading__data__pb2.GetPartyDiscountStatsRequest.FromString,
+            response_serializer=data__node_dot_api_dot_v2_dot_trading__data__pb2.GetPartyDiscountStatsResponse.SerializeToString,
         ),
         "ExportNetworkHistory": grpc.unary_stream_rpc_method_handler(
             servicer.ExportNetworkHistory,
@@ -6443,6 +6463,36 @@ class TradingDataService(object):
             "/datanode.api.v2.TradingDataService/EstimateAMMBounds",
             data__node_dot_api_dot_v2_dot_trading__data__pb2.EstimateAMMBoundsRequest.SerializeToString,
             data__node_dot_api_dot_v2_dot_trading__data__pb2.EstimateAMMBoundsResponse.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True,
+        )
+
+    @staticmethod
+    def GetPartyDiscountStats(
+        request,
+        target,
+        options=(),
+        channel_credentials=None,
+        call_credentials=None,
+        insecure=False,
+        compression=None,
+        wait_for_ready=None,
+        timeout=None,
+        metadata=None,
+    ):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            "/datanode.api.v2.TradingDataService/GetPartyDiscountStats",
+            data__node_dot_api_dot_v2_dot_trading__data__pb2.GetPartyDiscountStatsRequest.SerializeToString,
+            data__node_dot_api_dot_v2_dot_trading__data__pb2.GetPartyDiscountStatsResponse.FromString,
             options,
             channel_credentials,
             insecure,
