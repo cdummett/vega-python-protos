@@ -2800,18 +2800,22 @@ class VolumeBenefitTier(_message.Message):
         "minimum_running_notional_taker_volume",
         "volume_discount_factor",
         "volume_discount_factors",
+        "tier_number",
     )
     MINIMUM_RUNNING_NOTIONAL_TAKER_VOLUME_FIELD_NUMBER: _ClassVar[int]
     VOLUME_DISCOUNT_FACTOR_FIELD_NUMBER: _ClassVar[int]
     VOLUME_DISCOUNT_FACTORS_FIELD_NUMBER: _ClassVar[int]
+    TIER_NUMBER_FIELD_NUMBER: _ClassVar[int]
     minimum_running_notional_taker_volume: str
     volume_discount_factor: str
     volume_discount_factors: DiscountFactors
+    tier_number: int
     def __init__(
         self,
         minimum_running_notional_taker_volume: _Optional[str] = ...,
         volume_discount_factor: _Optional[str] = ...,
         volume_discount_factors: _Optional[_Union[DiscountFactors, _Mapping]] = ...,
+        tier_number: _Optional[int] = ...,
     ) -> None: ...
 
 class BenefitTier(_message.Message):
@@ -2822,6 +2826,7 @@ class BenefitTier(_message.Message):
         "referral_discount_factor",
         "referral_reward_factors",
         "referral_discount_factors",
+        "tier_number",
     )
     MINIMUM_RUNNING_NOTIONAL_TAKER_VOLUME_FIELD_NUMBER: _ClassVar[int]
     MINIMUM_EPOCHS_FIELD_NUMBER: _ClassVar[int]
@@ -2829,12 +2834,14 @@ class BenefitTier(_message.Message):
     REFERRAL_DISCOUNT_FACTOR_FIELD_NUMBER: _ClassVar[int]
     REFERRAL_REWARD_FACTORS_FIELD_NUMBER: _ClassVar[int]
     REFERRAL_DISCOUNT_FACTORS_FIELD_NUMBER: _ClassVar[int]
+    TIER_NUMBER_FIELD_NUMBER: _ClassVar[int]
     minimum_running_notional_taker_volume: str
     minimum_epochs: str
     referral_reward_factor: str
     referral_discount_factor: str
     referral_reward_factors: RewardFactors
     referral_discount_factors: DiscountFactors
+    tier_number: int
     def __init__(
         self,
         minimum_running_notional_taker_volume: _Optional[str] = ...,
@@ -2843,6 +2850,7 @@ class BenefitTier(_message.Message):
         referral_discount_factor: _Optional[str] = ...,
         referral_reward_factors: _Optional[_Union[RewardFactors, _Mapping]] = ...,
         referral_discount_factors: _Optional[_Union[DiscountFactors, _Mapping]] = ...,
+        tier_number: _Optional[int] = ...,
     ) -> None: ...
 
 class RewardFactors(_message.Message):
@@ -2990,15 +2998,22 @@ class LongBlockAuctionDurationTable(_message.Message):
     ) -> None: ...
 
 class VolumeRebateBenefitTier(_message.Message):
-    __slots__ = ("minimum_party_maker_volume_fraction", "additional_maker_rebate")
+    __slots__ = (
+        "minimum_party_maker_volume_fraction",
+        "additional_maker_rebate",
+        "tier_number",
+    )
     MINIMUM_PARTY_MAKER_VOLUME_FRACTION_FIELD_NUMBER: _ClassVar[int]
     ADDITIONAL_MAKER_REBATE_FIELD_NUMBER: _ClassVar[int]
+    TIER_NUMBER_FIELD_NUMBER: _ClassVar[int]
     minimum_party_maker_volume_fraction: str
     additional_maker_rebate: str
+    tier_number: int
     def __init__(
         self,
         minimum_party_maker_volume_fraction: _Optional[str] = ...,
         additional_maker_rebate: _Optional[str] = ...,
+        tier_number: _Optional[int] = ...,
     ) -> None: ...
 
 class VolumeRebateProgram(_message.Message):
